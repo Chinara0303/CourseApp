@@ -35,7 +35,8 @@ namespace Repository.Repositories
 
         public void Update(Teacher entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) throw new ArgumentNullException();
+            AppDbContext<Teacher>.datas.Add(entity);
         }
     }
 }

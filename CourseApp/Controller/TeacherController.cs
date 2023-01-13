@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Models;
+using Repository.Data;
 using ServiceLayer.Helpers.Constants;
 using ServiceLayer.Helpers.Extentions;
 using ServiceLayer.Services;
@@ -231,6 +232,95 @@ namespace CourseApp.Controller
 
             }
 
+        }
+
+        public void Update()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
+            Id: string idStr = Console.ReadLine();
+            int id;
+            bool isCorrectId = int.TryParse(idStr, out id);
+
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
+           TeacherName: string teacherName = Console.ReadLine();
+            try
+            {
+                //if (String.IsNullOrWhiteSpace(teacherName))
+                //{
+                //   teacherName = 
+                //}
+                 if (!Regex.IsMatch(teacherName, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherName;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherName;
+            }
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
+        TeacherSurname: string teacherSurname = Console.ReadLine();
+            try
+            {
+                if (String.IsNullOrWhiteSpace(teacherSurname))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    goto TeacherSurname;
+                }
+                else if (!Regex.IsMatch(teacherSurname, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherSurname;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherSurname;
+            }
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
+        TeacherAddress: string teacherAddress = Console.ReadLine();
+            try
+            {
+                if (String.IsNullOrWhiteSpace(teacherAddress))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + "/ Please enter again");
+                    goto TeacherAddress;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherAddress;
+            }
+            if (isCorrectId)
+            {
+                try
+                {
+                    Teacher teacher = new Teacher()
+                    {
+                        Name = teacherName,
+                        Surname = teacherSurname,
+                        Address = teacherAddress,
+                    };
+                    Teacher teacher1 = new();
+                    teacher = _service.Update(id, teacher1);
+                    _service.Delete(teacher1.Id);
+                    ConsoleColor.Green.WriteConsole("Successfully updated");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Id;
+                }
+            }
+            else
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
+                goto Id;
+            }
         }
 
     }

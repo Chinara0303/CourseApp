@@ -32,7 +32,7 @@ while (true)
                 teacherController.SearchByNameAndSurname();
                 break;
             case (int)Options.UpdateTeacher:
-                //teacherController.GetById();
+                teacherController.Update();
                 break;
             default:
                 ConsoleColor.Red.WriteConsole("Please, enter correct option");

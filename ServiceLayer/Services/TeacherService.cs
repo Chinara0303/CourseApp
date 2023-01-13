@@ -43,7 +43,6 @@ namespace ServiceLayer.Services
             if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
             return _repo.Get(t => t.Id == id);
         }
-
         public List<Teacher> SearchByNameAndSurname(string name, string surname)
         {
             if (String.IsNullOrWhiteSpace(name) && String.IsNullOrWhiteSpace(surname)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
@@ -52,9 +51,15 @@ namespace ServiceLayer.Services
             return teachers;
         }
 
-        public Teacher Update(int id, Teacher teacher)
+        public Teacher Update(int? id, Teacher teacher)
         {
-            throw new NotImplementedException();
+            if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            teacher.Id = _count - 1;
+            if (teacher == null) throw new ArgumentNullException();
+            //var res = _repo.Get(t=>t.Name.ToLower() != teacher.Name.ToLower());
+            //_repo.Delete(teacher);
+            _repo.Update(teacher);
+            return teacher;
         }
     }
 }
