@@ -155,7 +155,7 @@ namespace CourseApp.Controller
         public void GetById()
         {
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
-        Id: string idStr = Console.ReadLine();
+            Id: string idStr = Console.ReadLine();
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
             if (isCorrectId)
@@ -244,126 +244,46 @@ namespace CourseApp.Controller
             Id: string idStr = Console.ReadLine();
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
-            GetUpdateOption();
-            string optionStr = Console.ReadLine();
-            int optionNum;
-            bool IsCorrectOption = int.TryParse(optionStr, out optionNum);
 
-            if(IsCorrectOption)
-            {
-                while (true)
-                {
-                    ConsoleColor.Cyan.WriteConsole("Please, enter teacher name");
-                    string teacherName = Console.ReadLine();
-                    ConsoleColor.Cyan.WriteConsole("Do you want to continue? y/n");
-                    string answer = Console.ReadLine();
-                    GetUpdateOption();
-
-                    ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
-                    string teacherSurname = Console.ReadLine();
-                    ConsoleColor.Cyan.WriteConsole("Do you want to continue? y/n");
-                    answer = Console.ReadLine();
-                    GetUpdateOption();
-
-                    ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
-                    string teacherAddress = Console.ReadLine();
-                    ConsoleColor.Cyan.WriteConsole("Do you want to continue? y/n");
-                    answer = Console.ReadLine();
-                    GetUpdateOption();
-
-                    ConsoleColor.Cyan.WriteConsole("Please,enter teacher age");
-                    string ageStr = Console.ReadLine();
-                    int age;
-                    bool IsCorrectAge = int.TryParse(ageStr, out age);
-                    if (answer == "n")
-                    {
-                        try
-                        {
-                            Teacher teacher = new Teacher()
-                            {
-                                Name = teacherName,
-                                Surname = teacherSurname,
-                                Address = teacherAddress,
-                                Age = age
-                            };
-                            Teacher teacher1 = new();
-                            teacher1 = _service.Update(id, teacher);
-                            ConsoleColor.Green.WriteConsole("Successfully updated");
-                        }
-                        catch (Exception ex)
-                        {
-                            ConsoleColor.Red.WriteConsole(ex.Message);
-                            goto Id;
-                        }
-                    }
-
-                }
-
-
-                
-                
-                
-
-                //try
-                //{
-                //    Teacher teacher = new Teacher()
-                //    {
-                //        Name = teacherName,
-                //        Surname = teacherSurname,
-                //        Address = teacherAddress,
-                //        Age = age
-                //    };
-                //    Teacher teacher1 = new();
-                //    teacher1 = _service.Update(id, teacher);
-                //    ConsoleColor.Green.WriteConsole("Successfully updated");
-                //}
-                //catch (Exception ex)
-                //{
-                //    ConsoleColor.Red.WriteConsole(ex.Message);
-                //    goto Id;
-                //}
-            }
-            else
+            if (!isCorrectId)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format option number");
                 goto Id;
             }
+            else
+            {
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher name");
+                string teacherName = Console.ReadLine();
 
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher surname");
+                string teacherSurname = Console.ReadLine();
 
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher address");
+                string teacherAddress = Console.ReadLine();
 
-
-
-            //if (IsCorrectOption)
-            //{
-            //    switch (optionNum)
-            //    {
-            //        case 1:
-            //            ConsoleColor.Cyan.WriteConsole("Please, enter teacher name");
-            //            string teacherName = Console.ReadLine();
-            //            break;
-            //        case 2:
-            //            ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
-            //            string teacherSurname = Console.ReadLine();
-            //            break;
-            //        case 3:
-            //            ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
-            //            string teacherAddress = Console.ReadLine();
-            //            break;
-            //        case 4:
-            //            ConsoleColor.Cyan.WriteConsole("Please,enter teacher age");
-            //            string ageStr = Console.ReadLine();
-            //            int age;
-            //            bool IsCorrectAge = int.TryParse(ageStr, out age);
-
-                //}
-                //}
-
-            //else
-            //{
-            //    ConsoleColor.Red.WriteConsole("Please, enter correct format id");
-            //    goto Id;
-            //}
-
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher age");
+                string ageStr = Console.ReadLine();
+                int age;
+                bool IsCorrectAge = int.TryParse(ageStr, out age);
+                try
+                {
+                    Teacher teacher = new Teacher()
+                    {
+                        Name = teacherName,
+                        Surname = teacherSurname,
+                        Address = teacherAddress,
+                        Age = age
+                    };
+                    Teacher teacher1 = new();
+                    teacher1 = _service.Update(id, teacher);
+                    ConsoleColor.Green.WriteConsole("Successfully updated");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Id;
+                }
+            }
         }
 
     }

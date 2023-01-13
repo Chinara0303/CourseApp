@@ -67,9 +67,9 @@ namespace ServiceLayer.Services
                 if (String.IsNullOrWhiteSpace(teacher.Address))
                     teacher.Address = res.Address;
                 res.Address = teacher.Address;
-                //if(teacher.Age == null)
-                //    teacher.Age = res.Age;
-                //res.Age = teacher.Age;
+                if (teacher.Age == null)
+                    teacher.Age = res.Age;
+                res.Age = teacher.Age;
                 _repo.Update(teacher);
             } 
             else
