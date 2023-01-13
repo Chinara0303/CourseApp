@@ -20,12 +20,12 @@ namespace CourseApp.Controller
         private readonly ITeacherService _service;
         public TeacherController() => _service = new TeacherService();
         string msg = " / Please enter again";
-        string pattern = @"^(?!\\s+$)[a-zA-Z,'. -]+$";
+        string pattern = @"^(?!\\s+$)[a-zA-Z,'.-]+$";
         public void Create()
         {
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
-            TeacherName: string teacherName = Console.ReadLine();
-           
+        TeacherName: string teacherName = Console.ReadLine();
+
             try
             {
                 if (String.IsNullOrWhiteSpace(teacherName))
@@ -34,226 +34,6 @@ namespace CourseApp.Controller
                     goto TeacherName;
                 }
                 else if (!Regex.IsMatch(teacherName, pattern))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
-                    goto TeacherName;
-                }
-            }
-            catch (Exception ex)
-            {
-                ConsoleColor.Red.WriteConsole(ex.Message); 
-                goto TeacherName;
-            }
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
-            TeacherSurname: string teacherSurname = Console.ReadLine();
-            try
-            {
-                if (String.IsNullOrWhiteSpace(teacherSurname))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
-                    goto TeacherSurname;
-                }
-                else if (!Regex.IsMatch(teacherSurname, pattern))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
-                    goto TeacherSurname;
-                }
-            }
-            catch (Exception ex)
-            {
-                ConsoleColor.Red.WriteConsole(ex.Message);
-                goto TeacherSurname;
-            }
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
-            TeacherAddress: string teacherAddress = Console.ReadLine();
-            try
-            {
-                if (String.IsNullOrWhiteSpace(teacherAddress))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + "/ Please enter again");
-                    goto TeacherAddress;
-                }
-            }
-            catch (Exception ex)
-            {
-                ConsoleColor.Red.WriteConsole(ex.Message);
-                goto TeacherAddress;
-            }
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher age");
-            TeacherAge: string ageStr = Console.ReadLine();
-            int age;
-            bool IsCorrectAge = int.TryParse(ageStr, out age);
-            if (IsCorrectAge)
-            {
-                try
-                {
-                    Teacher teacher = new Teacher()
-                    {
-                        Name = teacherName,
-                        Surname = teacherSurname,
-                        Address = teacherAddress,
-                        Age = age
-                    };
-                   Teacher response =  _service.Create(teacher);
-                   ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{response.Name}, Surname:{response.Surname}, Age:{response.Age}, Address:{response.Address}");
-                }
-                catch (Exception ex)
-                {
-                    ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto TeacherAge;
-                }
-            }
-            else
-            {
-                ConsoleColor.Red.WriteConsole("Please, enter correct format age");
-                goto TeacherAge;
-            }
-
-        }
-
-        public void Delete()
-        {
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
-            Id: string idStr = Console.ReadLine();
-            int id;
-            bool isCorrectId = int.TryParse(idStr, out id);
-            if (isCorrectId)
-            {
-                try
-                {
-                   _service.Delete(id);
-                   ConsoleColor.Green.WriteConsole("Successfully deleted");
-
-                }
-                catch (Exception ex)
-                {
-                    ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto Id;
-                }
-            }
-            else
-            {
-                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
-                goto Id;
-            }
-        }
-
-        public void GetAll()
-        {
-            var result = _service.GetAll();
-            if (result.Count==0)
-            {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.NotFound);
-            }
-            foreach (var teacher in result)
-            {
-                ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{teacher.Name}, Surname:{teacher.Surname}, Age:{teacher.Age}, Address:{teacher.Address}");
-
-            }
-        }
-
-        public void GetById()
-        {
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
-            Id: string idStr = Console.ReadLine();
-            int id;
-            bool isCorrectId = int.TryParse(idStr, out id);
-            if (isCorrectId)
-            {
-                try
-                {
-                    Teacher response = _service.GetById(id);
-                    ConsoleColor.Green.WriteConsole($"Id:{response.Id}, Name:{response.Name}, Surname:{response.Surname}, Age:{response.Age}, Address:{response.Address}");
-                }
-                catch (Exception ex)
-                {
-                    ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto Id;
-                }
-            }
-            else
-            {
-                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
-                goto Id;
-            }
-        }
-        public void SearchByNameAndSurname()
-        {
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
-            TeacherName: string teacherName = Console.ReadLine();
-            try
-            {
-                if (String.IsNullOrWhiteSpace(teacherName))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
-                    goto TeacherName;
-                }
-                else if (!Regex.IsMatch(teacherName, pattern))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
-                    goto TeacherName;
-                }
-            }
-            catch (Exception ex)
-            {
-                ConsoleColor.Red.WriteConsole(ex.Message);
-                goto TeacherName;
-            }
-
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
-            TeacherSurname: string teacherSurname = Console.ReadLine();
-            try
-            {
-                if (String.IsNullOrWhiteSpace(teacherSurname))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
-                    goto TeacherSurname;
-                }
-                else if (!Regex.IsMatch(teacherSurname, pattern))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
-                    goto TeacherSurname;
-                }
-            }
-            catch (Exception ex)
-            {
-                ConsoleColor.Red.WriteConsole(ex.Message);
-                goto TeacherSurname;
-            }
-
-           List<Teacher> result = _service.SearchByNameAndSurname(teacherName, teacherSurname);
-            if (result.Count == 0)
-            {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.NotFound);
-            }
-            foreach (var teacher in result)
-            {
-                ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{teacher.Name}, Surname:{teacher.Surname}, Age:{teacher.Age}, Address:{teacher.Address}");
-
-            }
-
-        }
-
-        public void Update()
-        {
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
-            Id: string idStr = Console.ReadLine();
-            int id;
-            
-            
-            
-            
-            bool isCorrectId = int.TryParse(idStr, out id);
-
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
-           TeacherName: string teacherName = Console.ReadLine();
-            try
-            {
-                //if (String.IsNullOrWhiteSpace(teacherName))
-                //{
-                //   teacherName = 
-                //}
-                 if (!Regex.IsMatch(teacherName, pattern))
                 {
                     ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
                     goto TeacherName;
@@ -284,22 +64,26 @@ namespace CourseApp.Controller
                 ConsoleColor.Red.WriteConsole(ex.Message);
                 goto TeacherSurname;
             }
-        //    ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
-        //TeacherAddress: string teacherAddress = Console.ReadLine();
-        //    try
-        //    {
-        //        if (String.IsNullOrWhiteSpace(teacherAddress))
-        //        {
-        //            ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
-        //            goto TeacherAddress;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ConsoleColor.Red.WriteConsole(ex.Message);
-        //        goto TeacherAddress;
-        //    }
-            if (isCorrectId)
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
+        TeacherAddress: string teacherAddress = Console.ReadLine();
+            try
+            {
+                if (String.IsNullOrWhiteSpace(teacherAddress))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + "/ Please enter again");
+                    goto TeacherAddress;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherAddress;
+            }
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher age");
+        TeacherAge: string ageStr = Console.ReadLine();
+            int age;
+            bool IsCorrectAge = int.TryParse(ageStr, out age);
+            if (IsCorrectAge)
             {
                 try
                 {
@@ -307,11 +91,39 @@ namespace CourseApp.Controller
                     {
                         Name = teacherName,
                         Surname = teacherSurname,
-                        //Address = teacherAddress,
+                        Address = teacherAddress,
+                        Age = age
                     };
-                    Teacher teacher1 = new();
-                    teacher1 = _service.Update(id, teacher);
-                    ConsoleColor.Green.WriteConsole("Successfully updated");
+                    Teacher response = _service.Create(teacher);
+                    ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{response.Name}, Surname:{response.Surname}, Age:{response.Age}, Address:{response.Address}");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto TeacherAge;
+                }
+            }
+            else
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format age");
+                goto TeacherAge;
+            }
+
+        }
+
+        public void Delete()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
+        Id: string idStr = Console.ReadLine();
+            int id;
+            bool isCorrectId = int.TryParse(idStr, out id);
+            if (isCorrectId)
+            {
+                try
+                {
+                    _service.Delete(id);
+                    ConsoleColor.Green.WriteConsole("Successfully deleted");
+
                 }
                 catch (Exception ex)
                 {
@@ -324,6 +136,234 @@ namespace CourseApp.Controller
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
             }
+        }
+
+        public void GetAll()
+        {
+            var result = _service.GetAll();
+            if (result.Count == 0)
+            {
+                ConsoleColor.Red.WriteConsole(ResponseMessages.NotFound);
+            }
+            foreach (var teacher in result)
+            {
+                ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{teacher.Name}, Surname:{teacher.Surname}, Age:{teacher.Age}, Address:{teacher.Address}");
+
+            }
+        }
+
+        public void GetById()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
+        Id: string idStr = Console.ReadLine();
+            int id;
+            bool isCorrectId = int.TryParse(idStr, out id);
+            if (isCorrectId)
+            {
+                try
+                {
+                    Teacher response = _service.GetById(id);
+                    ConsoleColor.Green.WriteConsole($"Id:{response.Id}, Name:{response.Name}, Surname:{response.Surname}, Age:{response.Age}, Address:{response.Address}");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Id;
+                }
+            }
+            else
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
+                goto Id;
+            }
+        }
+        public void SearchByNameAndSurname()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
+        TeacherName: string teacherName = Console.ReadLine();
+            try
+            {
+                if (String.IsNullOrWhiteSpace(teacherName))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    goto TeacherName;
+                }
+                else if (!Regex.IsMatch(teacherName, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherName;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherName;
+            }
+
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
+        TeacherSurname: string teacherSurname = Console.ReadLine();
+            try
+            {
+                if (String.IsNullOrWhiteSpace(teacherSurname))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    goto TeacherSurname;
+                }
+                else if (!Regex.IsMatch(teacherSurname, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherSurname;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherSurname;
+            }
+
+            List<Teacher> result = _service.SearchByNameAndSurname(teacherName, teacherSurname);
+            if (result.Count == 0)
+            {
+                ConsoleColor.Red.WriteConsole(ResponseMessages.NotFound);
+            }
+            foreach (var teacher in result)
+            {
+                ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{teacher.Name}, Surname:{teacher.Surname}, Age:{teacher.Age}, Address:{teacher.Address}");
+
+            }
+
+        }
+        public void GetUpdateOption()
+        {
+            ConsoleColor.Cyan.WriteConsole("Choose one option: 1-Name, 2-Surname, 3-Address, 4-Age");
+            return;
+        }
+        public void Update()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
+            Id: string idStr = Console.ReadLine();
+            int id;
+            bool isCorrectId = int.TryParse(idStr, out id);
+            GetUpdateOption();
+            string optionStr = Console.ReadLine();
+            int optionNum;
+            bool IsCorrectOption = int.TryParse(optionStr, out optionNum);
+
+            if(IsCorrectOption)
+            {
+                while (true)
+                {
+                    ConsoleColor.Cyan.WriteConsole("Please, enter teacher name");
+                    string teacherName = Console.ReadLine();
+                    ConsoleColor.Cyan.WriteConsole("Do you want to continue? y/n");
+                    string answer = Console.ReadLine();
+                    GetUpdateOption();
+
+                    ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
+                    string teacherSurname = Console.ReadLine();
+                    ConsoleColor.Cyan.WriteConsole("Do you want to continue? y/n");
+                    answer = Console.ReadLine();
+                    GetUpdateOption();
+
+                    ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
+                    string teacherAddress = Console.ReadLine();
+                    ConsoleColor.Cyan.WriteConsole("Do you want to continue? y/n");
+                    answer = Console.ReadLine();
+                    GetUpdateOption();
+
+                    ConsoleColor.Cyan.WriteConsole("Please,enter teacher age");
+                    string ageStr = Console.ReadLine();
+                    int age;
+                    bool IsCorrectAge = int.TryParse(ageStr, out age);
+                    if (answer == "n")
+                    {
+                        try
+                        {
+                            Teacher teacher = new Teacher()
+                            {
+                                Name = teacherName,
+                                Surname = teacherSurname,
+                                Address = teacherAddress,
+                                Age = age
+                            };
+                            Teacher teacher1 = new();
+                            teacher1 = _service.Update(id, teacher);
+                            ConsoleColor.Green.WriteConsole("Successfully updated");
+                        }
+                        catch (Exception ex)
+                        {
+                            ConsoleColor.Red.WriteConsole(ex.Message);
+                            goto Id;
+                        }
+                    }
+
+                }
+
+
+                
+                
+                
+
+                //try
+                //{
+                //    Teacher teacher = new Teacher()
+                //    {
+                //        Name = teacherName,
+                //        Surname = teacherSurname,
+                //        Address = teacherAddress,
+                //        Age = age
+                //    };
+                //    Teacher teacher1 = new();
+                //    teacher1 = _service.Update(id, teacher);
+                //    ConsoleColor.Green.WriteConsole("Successfully updated");
+                //}
+                //catch (Exception ex)
+                //{
+                //    ConsoleColor.Red.WriteConsole(ex.Message);
+                //    goto Id;
+                //}
+            }
+            else
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format option number");
+                goto Id;
+            }
+
+
+
+
+
+            //if (IsCorrectOption)
+            //{
+            //    switch (optionNum)
+            //    {
+            //        case 1:
+            //            ConsoleColor.Cyan.WriteConsole("Please, enter teacher name");
+            //            string teacherName = Console.ReadLine();
+            //            break;
+            //        case 2:
+            //            ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
+            //            string teacherSurname = Console.ReadLine();
+            //            break;
+            //        case 3:
+            //            ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
+            //            string teacherAddress = Console.ReadLine();
+            //            break;
+            //        case 4:
+            //            ConsoleColor.Cyan.WriteConsole("Please,enter teacher age");
+            //            string ageStr = Console.ReadLine();
+            //            int age;
+            //            bool IsCorrectAge = int.TryParse(ageStr, out age);
+
+                //}
+                //}
+
+            //else
+            //{
+            //    ConsoleColor.Red.WriteConsole("Please, enter correct format id");
+            //    goto Id;
+            //}
+
         }
 
     }

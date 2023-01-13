@@ -55,8 +55,27 @@ namespace ServiceLayer.Services
         {
             if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
             var res = GetById(id);
-            if (res == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
-            if(res.Id == id) _repo.Update(teacher); 
+            if (res != null) 
+            {
+                teacher.Id = (int)id;
+                if (String.IsNullOrWhiteSpace(teacher.Name))
+                    teacher.Name = res.Name;
+                res.Name = teacher.Name;
+                if (String.IsNullOrWhiteSpace(teacher.Surname))
+                    teacher.Surname = res.Surname;
+                res.Surname = teacher.Surname;
+                if (String.IsNullOrWhiteSpace(teacher.Address))
+                    teacher.Address = res.Address;
+                res.Address = teacher.Address;
+                //if(teacher.Age == null)
+                //    teacher.Age = res.Age;
+                //res.Age = teacher.Age;
+                _repo.Update(teacher);
+            } 
+            else
+            {
+               throw new InvalidTeacherException(ResponseMessages.NotFound);
+            }
             return teacher;
         }
     }
