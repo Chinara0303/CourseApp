@@ -46,7 +46,10 @@ namespace ServiceLayer.Services
 
         public List<Teacher> SearchByNameAndSurname(string name, string surname)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(name) && String.IsNullOrWhiteSpace(surname)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
+            List<Teacher> teachers = _repo.GetAll(t=>t.Name.ToLower() == name.ToLower() && t.Surname.ToLower() == surname.ToLower());
+            if (teachers.Count == 0) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            return teachers;
         }
 
         public Teacher Update(int id, Teacher teacher)

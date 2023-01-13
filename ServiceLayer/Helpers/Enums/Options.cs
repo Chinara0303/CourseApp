@@ -12,7 +12,8 @@ namespace ServiceLayer.Helpers.Enums
         Deleteteacher,
         GetAllTeacher,
         GetTeacherById,
+        SearchNameAndSurnameByTeacher,
         UpdateTeacher,
-        SearchNameAndSurnameByTeacher
+        
     }
 }

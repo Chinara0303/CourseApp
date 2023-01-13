@@ -5,7 +5,9 @@ using ServiceLayer.Services;
 using ServiceLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,39 +18,66 @@ namespace CourseApp.Controller
     {
         private readonly ITeacherService _service;
         public TeacherController() => _service = new TeacherService();
-
+        string msg = " / Please enter again";
+        string pattern = @"^(?!\\s+$)[a-zA-Z,'. -]+$";
         public void Create()
         {
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
             TeacherName: string teacherName = Console.ReadLine();
-            string pattern = @"\|!#$%&/()=?»«@£§€{}.-;'<>_,";
-            if (teacherName == string.Empty)
+           
+            try
             {
-                ConsoleColor.Red.WriteConsole("The name of the teacher cannot be empty / Please enter again");
+                if (String.IsNullOrWhiteSpace(teacherName))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    goto TeacherName;
+                }
+                else if (!Regex.IsMatch(teacherName, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherName;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message); 
                 goto TeacherName;
             }
-            //else if (!Regex.IsMatch(teacherName, pattern))
-            //{
-            //    ConsoleColor.Red.WriteConsole("Please enter correct again");
-            //    goto TeacherName;
-            //}
-
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
             TeacherSurname: string teacherSurname = Console.ReadLine();
-            if (teacherSurname == string.Empty)
+            try
             {
-                ConsoleColor.Red.WriteConsole("The surname of the teacher cannot be empty / Please enter again");
+                if (String.IsNullOrWhiteSpace(teacherSurname))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    goto TeacherSurname;
+                }
+                else if (!Regex.IsMatch(teacherSurname, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherSurname;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
                 goto TeacherSurname;
             }
-
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
             TeacherAddress: string teacherAddress = Console.ReadLine();
-            if (teacherAddress == string.Empty)
+            try
             {
-                ConsoleColor.Red.WriteConsole("The address of the teacher cannot be empty / Please enter again");
+                if (String.IsNullOrWhiteSpace(teacherAddress))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + "/ Please enter again");
+                    goto TeacherAddress;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
                 goto TeacherAddress;
             }
-
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher age");
             TeacherAge: string ageStr = Console.ReadLine();
             int age;
@@ -65,7 +94,7 @@ namespace CourseApp.Controller
                         Age = age
                     };
                    Teacher response =  _service.Create(teacher);
-                    ConsoleColor.Green.WriteConsole($"Name:{response.Name}, Surname:{response.Surname}, Age:{response.Age}, Address:{response.Address}");
+                   ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{response.Name}, Surname:{response.Surname}, Age:{response.Age}, Address:{response.Address}");
                 }
                 catch (Exception ex)
                 {
@@ -91,7 +120,7 @@ namespace CourseApp.Controller
             {
                 try
                 {
-                  _service.Delete(id);
+                   _service.Delete(id);
                    ConsoleColor.Green.WriteConsole("Successfully deleted");
 
                 }
@@ -117,9 +146,91 @@ namespace CourseApp.Controller
             }
             foreach (var teacher in result)
             {
-                ConsoleColor.Green.WriteConsole($"Name:{teacher.Name}, Surname:{teacher.Surname}, Age:{teacher.Age}, Address:{teacher.Address}");
+                ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{teacher.Name}, Surname:{teacher.Surname}, Age:{teacher.Age}, Address:{teacher.Address}");
 
             }
+        }
+
+        public void GetById()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
+            Id: string idStr = Console.ReadLine();
+            int id;
+            bool isCorrectId = int.TryParse(idStr, out id);
+            if (isCorrectId)
+            {
+                try
+                {
+                    Teacher response = _service.GetById(id);
+                    ConsoleColor.Green.WriteConsole($"Id:{response.Id}, Name:{response.Name}, Surname:{response.Surname}, Age:{response.Age}, Address:{response.Address}");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Id;
+                }
+            }
+            else
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
+                goto Id;
+            }
+        }
+        public void SearchByNameAndSurname()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
+            TeacherName: string teacherName = Console.ReadLine();
+            try
+            {
+                if (String.IsNullOrWhiteSpace(teacherName))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    goto TeacherName;
+                }
+                else if (!Regex.IsMatch(teacherName, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherName;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherName;
+            }
+
+            ConsoleColor.Cyan.WriteConsole("Please,enter teacher surname");
+            TeacherSurname: string teacherSurname = Console.ReadLine();
+            try
+            {
+                if (String.IsNullOrWhiteSpace(teacherSurname))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    goto TeacherSurname;
+                }
+                else if (!Regex.IsMatch(teacherSurname, pattern))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
+                    goto TeacherSurname;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                goto TeacherSurname;
+            }
+
+           List<Teacher> result = _service.SearchByNameAndSurname(teacherName, teacherSurname);
+            if (result.Count == 0)
+            {
+                ConsoleColor.Red.WriteConsole(ResponseMessages.NotFound);
+            }
+            foreach (var teacher in result)
+            {
+                ConsoleColor.Green.WriteConsole($"Id:{teacher.Id}, Name:{teacher.Name}, Surname:{teacher.Surname}, Age:{teacher.Age}, Address:{teacher.Address}");
+
+            }
+
         }
 
     }

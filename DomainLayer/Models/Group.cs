@@ -13,5 +13,6 @@ namespace DomainLayer.Models
         public string Capacity { get; set; }
         public DateTime CreateDate { get; set; }
         public Teacher Teacher { get; set; }
+     
     }
 }
