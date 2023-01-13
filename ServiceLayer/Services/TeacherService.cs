@@ -46,7 +46,7 @@ namespace ServiceLayer.Services
         public List<Teacher> SearchByNameAndSurname(string name, string surname)
         {
             if (String.IsNullOrWhiteSpace(name) && String.IsNullOrWhiteSpace(surname)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
-            List<Teacher> teachers = _repo.GetAll(t=>t.Name.ToLower() == name.ToLower() && t.Surname.ToLower() == surname.ToLower());
+            List<Teacher> teachers = _repo.GetAll(t => t.Name.ToLower() == name.ToLower() && t.Surname.ToLower() == surname.ToLower());
             if (teachers.Count == 0) throw new InvalidTeacherException(ResponseMessages.NotFound);
             return teachers;
         }
@@ -54,11 +54,9 @@ namespace ServiceLayer.Services
         public Teacher Update(int? id, Teacher teacher)
         {
             if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
-            teacher.Id = _count - 1;
-            if (teacher == null) throw new ArgumentNullException();
-            //var res = _repo.Get(t=>t.Name.ToLower() != teacher.Name.ToLower());
-            //_repo.Delete(teacher);
-            _repo.Update(teacher);
+            var res = GetById(id);
+            if (res == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            if(res.Id == id) _repo.Update(teacher); 
             return teacher;
         }
     }

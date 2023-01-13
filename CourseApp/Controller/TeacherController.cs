@@ -239,6 +239,10 @@ namespace CourseApp.Controller
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher id");
             Id: string idStr = Console.ReadLine();
             int id;
+            
+            
+            
+            
             bool isCorrectId = int.TryParse(idStr, out id);
 
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
@@ -280,21 +284,21 @@ namespace CourseApp.Controller
                 ConsoleColor.Red.WriteConsole(ex.Message);
                 goto TeacherSurname;
             }
-            ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
-        TeacherAddress: string teacherAddress = Console.ReadLine();
-            try
-            {
-                if (String.IsNullOrWhiteSpace(teacherAddress))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + "/ Please enter again");
-                    goto TeacherAddress;
-                }
-            }
-            catch (Exception ex)
-            {
-                ConsoleColor.Red.WriteConsole(ex.Message);
-                goto TeacherAddress;
-            }
+        //    ConsoleColor.Cyan.WriteConsole("Please,enter teacher address");
+        //TeacherAddress: string teacherAddress = Console.ReadLine();
+        //    try
+        //    {
+        //        if (String.IsNullOrWhiteSpace(teacherAddress))
+        //        {
+        //            ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+        //            goto TeacherAddress;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ConsoleColor.Red.WriteConsole(ex.Message);
+        //        goto TeacherAddress;
+        //    }
             if (isCorrectId)
             {
                 try
@@ -303,11 +307,10 @@ namespace CourseApp.Controller
                     {
                         Name = teacherName,
                         Surname = teacherSurname,
-                        Address = teacherAddress,
+                        //Address = teacherAddress,
                     };
                     Teacher teacher1 = new();
-                    teacher = _service.Update(id, teacher1);
-                    _service.Delete(teacher1.Id);
+                    teacher1 = _service.Update(id, teacher);
                     ConsoleColor.Green.WriteConsole("Successfully updated");
                 }
                 catch (Exception ex)

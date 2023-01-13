@@ -3,7 +3,7 @@ using CourseApp.Controller;
 using ServiceLayer.Helpers.Enums;
 using ServiceLayer.Helpers.Extentions;
 
-TeacherController teacherController = new();
+TeacherController teacherController = new();    
 while (true)
 {
     GetConsole();
