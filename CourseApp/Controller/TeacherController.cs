@@ -26,7 +26,7 @@ namespace CourseApp.Controller
         public void Create()
         {
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
-        TeacherName: string teacherName = Console.ReadLine();
+            TeacherName: string teacherName = Console.ReadLine();
 
             try
             {

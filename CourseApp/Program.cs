@@ -3,7 +3,8 @@ using CourseApp.Controller;
 using ServiceLayer.Helpers.Enums;
 using ServiceLayer.Helpers.Extentions;
 
-TeacherController teacherController = new();    
+TeacherController teacherController = new();
+GroupController groupController = new();
 while (true)
 {
     GetConsole();
@@ -33,6 +34,15 @@ while (true)
                 break;
             case (int)Options.UpdateTeacher:
                 teacherController.Update();
+                break;
+            case (int)Options.CreateGroup:
+                groupController.Create();
+                break;
+            case (int)Options.UpdateGroup:
+                //teacherController.Update();
+                break;
+            case (int)Options.GetGroupById:
+                //teacherController.Update();
                 break;
             default:
                 ConsoleColor.Red.WriteConsole("Please, enter correct option");
