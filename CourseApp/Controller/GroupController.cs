@@ -187,5 +187,37 @@ namespace CourseApp.Controller
                 }
             }
         }
+        public void GetAllByTeacherName()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please, enter group teacher name");
+            TeacherName: string teacherName = Console.ReadLine();
+            if (String.IsNullOrWhiteSpace(teacherName))
+            {
+                ConsoleColor.Red.WriteConsole(msgForEmptyInput + msg);
+                goto TeacherName;
+            }
+            else
+            {
+                try
+                {
+                    var groups = _service.GetAllByTeacherName(teacherName);
+                    foreach (DomainLayer.Models.Group group in groups)
+                    {
+                        ConsoleColor.Green.WriteConsole
+                        (
+                          $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
+                          $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
+                          $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $"{group.Teacher.Age},{group.Teacher.Address}"
+                        );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto TeacherName;
+                }
+            }
+        }
     }
 }

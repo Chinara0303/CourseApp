@@ -36,8 +36,8 @@ namespace ServiceLayer.Services
         {
             if(id == null) throw new InvalidGroupException(ResponseMessages.NotFound);
             Group dbGroup = _repo.Get(g => g.Id == id);
-            if (dbGroup is null) throw new InvalidGroupException(ResponseMessages.NotFound);
             _repo.Delete(dbGroup);
+            if (dbGroup is null) throw new InvalidGroupException(ResponseMessages.NotFound);
         }
 
         public List<Group> GetAllByCapacity(int? capacity)
@@ -58,20 +58,23 @@ namespace ServiceLayer.Services
 
         public List<Group> GetAllByTeacherName(string teacherName)
         {
-            throw new NotImplementedException();
+            if (teacherName is null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            List<Group> dbgroups = _repo.GetAll(g => g.Teacher.Name == teacherName);
+            if (dbgroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
+            return dbgroups;
         }
 
         public Group GetById(int? id)
         {
-            if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            if (id == null) throw new InvalidGroupException(ResponseMessages.NotFound);
             Group dbGroup = _repo.Get(g => g.Id == id);
-            if (dbGroup is null) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            if (dbGroup is null) throw new InvalidGroupException(ResponseMessages.NotFound);
             return dbGroup;
         }
 
         public int GetCount()
         {
-            throw new NotImplementedException();
+            return _repo.GetAll().Count;
         }
 
         public List<Group> SearchByName(string searchText)

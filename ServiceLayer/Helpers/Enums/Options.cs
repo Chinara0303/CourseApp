@@ -20,7 +20,7 @@ namespace ServiceLayer.Helpers.Enums
         DeleteGroup,
         GetAllGroupsByCapacity,
         GetAllGroupsByTeacherId,
-        GetAllGroupsByteacherName,
+        GetAllGroupsByTeacherName,
         SearchForGroupByName,
         GetAllGroupsByCount
     }

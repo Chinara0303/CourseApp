@@ -53,6 +53,12 @@ while (true)
             case (int)Options.GetAllGroupsByTeacherId:
                 groupController.GetAllByTeacherId();
                 break;
+            case (int)Options.GetAllGroupsByTeacherName:
+                groupController.GetAllByTeacherName();
+                break;
+            case (int)Options.GetAllGroupsByCount:
+                //groupController.();
+                break;
             default:
                 ConsoleColor.Red.WriteConsole("Please, enter correct option");
                 break;
