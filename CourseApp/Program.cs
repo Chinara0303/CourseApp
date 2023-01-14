@@ -39,10 +39,19 @@ while (true)
                 groupController.Create();
                 break;
             case (int)Options.UpdateGroup:
-                //teacherController.Update();
+                //groupController.Delete();
                 break;
             case (int)Options.GetGroupById:
                 //teacherController.Update();
+                break;
+            case (int)Options.DeleteGroup:
+                groupController.Delete();
+                break;
+            case (int)Options.GetAllGroupsByCapacity:
+                groupController.GetAllByCapacity();
+                break;
+            case (int)Options.GetAllGroupsByTeacherId:
+                groupController.GetAllByTeacherId();
                 break;
             default:
                 ConsoleColor.Red.WriteConsole("Please, enter correct option");

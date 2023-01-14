@@ -9,18 +9,24 @@ namespace ServiceLayer.Services
     public class GroupService : IGroupService
     {
         private readonly GroupRepository _repo;
+        private readonly TeacherRepository _repoTeacher;
         private int _count = 1;
-        public GroupService() => _repo = new GroupRepository();
-        
+        public GroupService() 
+        {
+            _repoTeacher = new TeacherRepository();
+            _repo = new GroupRepository();
+        }
+
         public Group Create(int? teacherId, Group group)
         {
             group.Id = _count;
-            var existTeacher = _repo.Get(g => g.Teacher.Id == teacherId);
+            Teacher existTeacher = _repoTeacher.Get(g => g.Id == teacherId);
+            group.Teacher = existTeacher;
+            if (existTeacher is null) throw new InvalidGroupException(ResponseMessages.NotFound);
 
-            //if (existTeacher is null) throw new InvalidGroupException(ResponseMessages.NotFound);
-
-            var existGroup = _repo.Get(g => g.Name == group.Name);
+            Group existGroup = _repo.Get(g => g.Name.ToLower() == group.Name.ToLower());
             if (existGroup != null) throw new InvalidGroupException(ResponseMessages.ExistMessage);
+
             _repo.Create(group);
             _count++;
             return group;
@@ -28,17 +34,26 @@ namespace ServiceLayer.Services
 
         public void Delete(int? id)
         {
-            throw new NotImplementedException();
+            if(id == null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            Group dbGroup = _repo.Get(g => g.Id == id);
+            if (dbGroup is null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            _repo.Delete(dbGroup);
         }
 
-        public List<Group> GetAllByCapacity(int? id)
+        public List<Group> GetAllByCapacity(int? capacity)
         {
-            throw new NotImplementedException();
+            if (capacity is null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            List<Group> dbgroups = _repo.GetAll(g => g.Capacity == capacity);
+            if (dbgroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
+            return dbgroups;
         }
 
         public List<Group> GetAllByTeacherId(int? teacherId)
         {
-            throw new NotImplementedException();
+            if (teacherId is null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            List<Group> dbgroups = _repo.GetAll(g => g.Teacher.Id == teacherId);
+            if (dbgroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
+            return dbgroups;
         }
 
         public List<Group> GetAllByTeacherName(string teacherName)

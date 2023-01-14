@@ -8,7 +8,7 @@ namespace ServiceLayer.Services.Interfaces
         void Delete(int? id);
         Group Update(int? id, Group group);
         Group GetById(int? id);
-        List<Group> GetAllByCapacity(int? id);
+        List<Group> GetAllByCapacity(int? capacity);
         int GetCount();
         List<Group> GetAllByTeacherId(int? teacherId);
         List<Group> GetAllByTeacherName(string teacherName);

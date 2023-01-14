@@ -119,7 +119,7 @@ namespace CourseApp.Controller
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
 
-            if (isCorrectId && id > 0)
+            if (isCorrectId)
             {
                 try
                 {

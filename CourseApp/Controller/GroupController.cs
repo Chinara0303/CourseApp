@@ -11,6 +11,7 @@ namespace CourseApp.Controller
     {
         private readonly IGroupService _service;
         public GroupController() => _service = new GroupService();
+
         string pattern = "^(?!\\s+$)['.-]+$";
         string msg = " / Please enter again";
         string msgForEmptyInput = " / If you leave it blank, there will be no change";
@@ -47,11 +48,21 @@ namespace CourseApp.Controller
                 ConsoleColor.Red.WriteConsole("Please, enter correct format capacity number");
                 goto Capacity;
             }
-            ConsoleColor.Cyan.WriteConsole("Please, enter teacher id for group");
-           Id: string idStr =  Console.ReadLine();
+            else if(capacity >= 20)
+            {
+                ConsoleColor.Red.WriteConsole("Can not be greater than 20" + msg);
+                goto Capacity;
+            }
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher id for group");
+            Id: string idStr =  Console.ReadLine();
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
-            if (isCorrectId && id > 0)
+            if (!isCorrectId && id < 0)
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id" + msg);
+                goto Id;
+            }
+            else
             {
                 try
                 {
@@ -61,12 +72,12 @@ namespace CourseApp.Controller
                         Capacity = capacity,
                         CreateDate = DateTime.Now,
                     };
-                    _service.Create(id,group);
+                    _service.Create(id, group);
                     ConsoleColor.Green.WriteConsole
                     (
                         $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                        $" Create date:{group.CreateDate}," +
-                        $" Teacher:{group.Teacher.Id},{group.Teacher.Name},{group.Teacher.Surname}," +
+                        $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
+                        $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
                         $"{group.Teacher.Age},{group.Teacher.Address}"
                     );
                 }
@@ -76,12 +87,105 @@ namespace CourseApp.Controller
                     goto Id;
                 }
             }
-            else
+        }
+
+        public void Delete()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please, enter group id");
+        Id: string idStr = Console.ReadLine();
+            int id;
+            bool isCorrectId = int.TryParse(idStr, out id);
+
+            if (!isCorrectId && id < 0)
             {
-                ConsoleColor.Red.WriteConsole("Please, enter correct format id" + msg);
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
             }
+            else
+            {
+                try
+                {
+                    _service.Delete(id);
+                    ConsoleColor.Green.WriteConsole("Successfully deleted");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Id;
+                }
+            }
+        }
 
+        public void GetAllByCapacity()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please, enter group capacity number");
+        Capacity: string capacityStr = Console.ReadLine();
+            int capacity;
+            bool isCorrectCapacity = int.TryParse(capacityStr, out capacity);
+
+            if (!isCorrectCapacity && capacity < 0)
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
+                goto Capacity;
+            }
+            else
+            {
+                try
+                {
+                    var groups = _service.GetAllByCapacity(capacity);
+                    foreach (DomainLayer.Models.Group group in groups)
+                    {
+                        ConsoleColor.Green.WriteConsole
+                        (
+                          $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
+                          $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
+                          $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $"{group.Teacher.Age},{group.Teacher.Address}"
+                        );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Capacity;
+                }
+            }
+        }
+
+        public void GetAllByTeacherId()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please, enter group teacher id");
+        Id: string teacherIdStr = Console.ReadLine();
+            int id;
+            bool isCorrectTeacherId = int.TryParse(teacherIdStr, out id);
+
+            if (!isCorrectTeacherId && id < 0)
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
+                goto Id;
+            }
+            else
+            {
+                try
+                {
+                    var groups = _service.GetAllByTeacherId(id);
+                    foreach (DomainLayer.Models.Group group in groups)
+                    {
+                        ConsoleColor.Green.WriteConsole
+                        (
+                          $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
+                          $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
+                          $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $"{group.Teacher.Age},{group.Teacher.Address}"
+                        );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Id;
+                }
+            }
         }
     }
 }

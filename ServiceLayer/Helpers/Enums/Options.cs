@@ -18,8 +18,8 @@ namespace ServiceLayer.Helpers.Enums
         UpdateGroup,
         GetGroupById,
         DeleteGroup,
-        GetGroupsByCapacity,
-        GetGroupsByTeacherId,
+        GetAllGroupsByCapacity,
+        GetAllGroupsByTeacherId,
         GetAllGroupsByteacherName,
         SearchForGroupByName,
         GetAllGroupsByCount
