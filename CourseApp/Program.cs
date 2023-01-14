@@ -42,7 +42,7 @@ while (true)
                 //groupController.Delete();
                 break;
             case (int)Options.GetGroupById:
-                //teacherController.Update();
+                groupController.GetById();
                 break;
             case (int)Options.DeleteGroup:
                 groupController.Delete();
@@ -56,8 +56,11 @@ while (true)
             case (int)Options.GetAllGroupsByTeacherName:
                 groupController.GetAllByTeacherName();
                 break;
+            case (int)Options.SearchForGroupByName:
+                groupController.SearchByName();
+                break;
             case (int)Options.GetAllGroupsByCount:
-                //groupController.();
+                groupController.GetCount();
                 break;
             default:
                 ConsoleColor.Red.WriteConsole("Please, enter correct option");

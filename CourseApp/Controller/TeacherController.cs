@@ -125,7 +125,6 @@ namespace CourseApp.Controller
                 {
                     _service.Delete(id);
                     ConsoleColor.Green.WriteConsole("Successfully deleted");
-
                 }
                 catch (Exception ex)
                 {

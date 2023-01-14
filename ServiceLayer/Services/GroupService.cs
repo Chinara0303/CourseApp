@@ -59,7 +59,7 @@ namespace ServiceLayer.Services
         public List<Group> GetAllByTeacherName(string teacherName)
         {
             if (teacherName is null) throw new InvalidGroupException(ResponseMessages.NotFound);
-            List<Group> dbgroups = _repo.GetAll(g => g.Teacher.Name == teacherName);
+            List<Group> dbgroups = _repo.GetAll(g => g.Teacher.Name.ToLower() == teacherName.ToLower());
             if (dbgroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
             return dbgroups;
         }
@@ -74,12 +74,17 @@ namespace ServiceLayer.Services
 
         public int GetCount()
         {
-            return _repo.GetAll().Count;
+            int digit = _repo.GetAll().Count;
+            if (digit <= 0) throw new InvalidGroupException(ResponseMessages.NotFound);
+            return digit;
         }
 
         public List<Group> SearchByName(string searchText)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(searchText)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
+            List<Group> groups = _repo.GetAll(g => g.Name.ToLower().Contains(searchText.ToLower()));
+            if (groups.Count == 0) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            return groups;
         }
 
         public Group Update(int? id, Group group)

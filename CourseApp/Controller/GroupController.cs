@@ -88,7 +88,6 @@ namespace CourseApp.Controller
                 }
             }
         }
-
         public void Delete()
         {
             ConsoleColor.Cyan.WriteConsole("Please, enter group id");
@@ -115,7 +114,6 @@ namespace CourseApp.Controller
                 }
             }
         }
-
         public void GetAllByCapacity()
         {
             ConsoleColor.Cyan.WriteConsole("Please, enter group capacity number");
@@ -151,7 +149,6 @@ namespace CourseApp.Controller
                 }
             }
         }
-
         public void GetAllByTeacherId()
         {
             ConsoleColor.Cyan.WriteConsole("Please, enter group teacher id");
@@ -218,6 +215,84 @@ namespace CourseApp.Controller
                     goto TeacherName;
                 }
             }
+        }
+        public void SearchByName()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please, enter group search text");
+        SearchText: string searchText = Console.ReadLine();
+            if (String.IsNullOrWhiteSpace(searchText))
+            {
+                ConsoleColor.Red.WriteConsole(msgForEmptyInput + msg);
+                goto SearchText;
+            }
+            else
+            {
+                try
+                {
+                    var groups = _service.SearchByName(searchText);
+                    foreach (DomainLayer.Models.Group group in groups)
+                    {
+                        ConsoleColor.Green.WriteConsole
+                        (
+                          $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
+                          $"Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
+                          $"Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $"{group.Teacher.Age},{group.Teacher.Address}"
+                        );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto SearchText;
+                }
+            }
+        }
+        public void GetById()
+        {
+            ConsoleColor.Cyan.WriteConsole("Please, enter group id");
+        Id: string IdStr = Console.ReadLine();
+            int id;
+            bool isCorrectId = int.TryParse(IdStr, out id);
+
+            if (!isCorrectId)
+            {
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
+                goto Id;
+            }
+            else
+            {
+                try
+                {
+                    var group = _service.GetById(id);
+                    ConsoleColor.Green.WriteConsole
+                    (
+                        $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
+                        $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
+                        $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                        $"{group.Teacher.Age},{group.Teacher.Address}"
+                   );
+                   
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Id;
+                }
+            }
+        }
+        public void GetCount()
+        {
+            try
+            {
+                int number = _service.GetCount();
+                ConsoleColor.Green.WriteConsole($"Group Count:{number}");
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+            }
+            
         }
     }
 }
