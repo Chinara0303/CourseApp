@@ -14,6 +14,14 @@ namespace ServiceLayer.Helpers.Enums
         GetTeacherById,
         SearchNameAndSurnameByTeacher,
         UpdateTeacher,
-        
+        CreateGroup,
+        UpdateGroup,
+        GetGroupById,
+        DeleteGroup,
+        GetGroupsByCapacity,
+        GetGroupsByTeacherId,
+        GetAllGroupsByteacherName,
+        SearchForGroupByName,
+        GetAllGroupsByCount
     }
 }

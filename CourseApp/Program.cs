@@ -50,5 +50,10 @@ while (true)
 static void GetConsole()
 {
     ConsoleColor.White.WriteConsole("Please, choose one option");
-    ConsoleColor.Magenta.WriteConsole("Teacher options:\n1-Create\n2-Delete\n3-Get all\n4-Get by id\n5-Search by name and surname\n6-Update");
+    ConsoleColor.Magenta.WriteConsole
+        ("Teacher options:\n1-Create\n2-Delete\n3-Get all\n4-Get by id\n5-Search by name and surname\n6-Update");
+    ConsoleColor.Magenta.WriteConsole
+        ("Group options:\n7-Create\n8-Update\n9-Get by id\n10-Delete" +
+        "\n11-Get groups by capacity\n12-Get groups by teacherId " +
+        "\n13-Get all groups  by teacherName\n14-Search method for group by name\n15-Get all groups count");
 }

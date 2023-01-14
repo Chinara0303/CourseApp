@@ -15,7 +15,7 @@ namespace ServiceLayer.Services.Interfaces
         Teacher Update(int? id,Teacher teacher);
         Teacher GetById(int? id);
         List<Teacher> GetAll();
-        List<Teacher> SearchByNameAndSurname(string name, string surname);
+        List<Teacher> SearchByNameAndSurname(string searchText);
 
     }
 }

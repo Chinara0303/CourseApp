@@ -30,6 +30,7 @@ namespace ServiceLayer.Services
         {
             if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
             Teacher filteredteacher =  _repo.Get(t => t.Id == id);
+            if (filteredteacher is null) throw new InvalidTeacherException(ResponseMessages.NotFound);
             _repo.Delete(filteredteacher);
         }
 
@@ -41,16 +42,17 @@ namespace ServiceLayer.Services
         public Teacher GetById(int? id)
         {
             if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
-            return _repo.Get(t => t.Id == id);
+            Teacher dbTeacher = _repo.Get(t => t.Id == id);
+            if (dbTeacher is null) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            return dbTeacher;
         }
-        public List<Teacher> SearchByNameAndSurname(string name, string surname)
+        public List<Teacher> SearchByNameAndSurname(string searchText)
         {
-            if (String.IsNullOrWhiteSpace(name) && String.IsNullOrWhiteSpace(surname)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
-            List<Teacher> teachers = _repo.GetAll(t => t.Name.ToLower() == name.ToLower() && t.Surname.ToLower() == surname.ToLower());
+            if (String.IsNullOrWhiteSpace(searchText)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
+            List<Teacher> teachers = _repo.GetAll(t => t.Name.ToLower().Contains(searchText.ToLower()) || t.Surname.ToLower().Contains(searchText.ToLower()));
             if (teachers.Count == 0) throw new InvalidTeacherException(ResponseMessages.NotFound);
             return teachers;
         }
-
         public Teacher Update(int? id, Teacher teacher)
         {
             if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
@@ -60,13 +62,13 @@ namespace ServiceLayer.Services
                 teacher.Id = (int)id;
                 if (String.IsNullOrWhiteSpace(teacher.Name))
                     teacher.Name = res.Name;
-                res.Name = teacher.Name;
+                res.Name = String.Concat(teacher.Name[0].ToString().ToUpper()) + teacher.Name.Substring(1).ToLower();
                 if (String.IsNullOrWhiteSpace(teacher.Surname))
                     teacher.Surname = res.Surname;
-                res.Surname = teacher.Surname;
+                res.Surname = String.Concat(teacher.Surname[0].ToString().ToUpper()) + teacher.Surname.Substring(1).ToLower();
                 if (String.IsNullOrWhiteSpace(teacher.Address))
                     teacher.Address = res.Address;
-                res.Address = teacher.Address;
+                res.Address = String.Concat(teacher.Address[0].ToString().ToUpper()) + teacher.Address.Substring(1).ToLower();
                 if (teacher.Age == null)
                     teacher.Age = res.Age;
                 res.Age = teacher.Age;

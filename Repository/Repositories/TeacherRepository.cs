@@ -23,7 +23,7 @@ namespace Repository.Repositories
             AppDbContext<Teacher>.datas.Remove(entity);
         }
 
-        public Teacher Get(Predicate<Teacher> predicate )
+        public Teacher Get(Predicate<Teacher> predicate)
         {
             return AppDbContext<Teacher>.datas.Find(predicate);
         }
