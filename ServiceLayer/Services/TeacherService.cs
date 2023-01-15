@@ -63,12 +63,15 @@ namespace ServiceLayer.Services
                 if (String.IsNullOrWhiteSpace(teacher.Name))
                     teacher.Name = res.Name;
                 res.Name = String.Concat(teacher.Name[0].ToString().ToUpper()) + teacher.Name.Substring(1).ToLower();
+              
                 if (String.IsNullOrWhiteSpace(teacher.Surname))
                     teacher.Surname = res.Surname;
                 res.Surname = String.Concat(teacher.Surname[0].ToString().ToUpper()) + teacher.Surname.Substring(1).ToLower();
+               
                 if (String.IsNullOrWhiteSpace(teacher.Address))
                     teacher.Address = res.Address;
                 res.Address = String.Concat(teacher.Address[0].ToString().ToUpper()) + teacher.Address.Substring(1).ToLower();
+                
                 if (teacher.Age == null)
                     teacher.Age = res.Age;
                 res.Age = teacher.Age;
