@@ -39,7 +39,7 @@ while (true)
                 groupController.Create();
                 break;
             case (int)Options.UpdateGroup:
-                //groupController.Delete();
+                groupController.Update();
                 break;
             case (int)Options.GetGroupById:
                 groupController.GetById();

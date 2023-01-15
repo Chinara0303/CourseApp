@@ -89,7 +89,31 @@ namespace ServiceLayer.Services
 
         public Group Update(int? id, Group group)
         {
-            throw new NotImplementedException();
+            if (id is null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            //if(group is null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            //var res = _repoTeacher.Get(g => g.Id == id);
+            //if (res is null) throw new InvalidGroupException(ResponseMessages.NotFound);
+
+            Group dbGroup = GetById(id);
+            //group.Teacher = res;
+            //group.Teacher.Id = res.Id;
+            //res.Id = group.Teacher.Id;
+            if (dbGroup is null) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            if (dbGroup != null)
+            {
+                group.Id = (int)id;
+                if(String.IsNullOrWhiteSpace(group.Name))
+                    group.Name = dbGroup.Name;
+                dbGroup.Name= group.Name;
+                if(group.Capacity == null)
+                    group.Capacity = dbGroup.Capacity;
+                dbGroup.Capacity = group.Capacity;
+            }
+            else
+            {
+               throw new InvalidTeacherException(ResponseMessages.NotFound);
+            }
+            return group;
         }
     }
 }
