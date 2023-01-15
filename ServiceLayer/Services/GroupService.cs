@@ -24,9 +24,9 @@ namespace ServiceLayer.Services
             group.Teacher = existTeacher;
             if (existTeacher is null) throw new InvalidGroupException(ResponseMessages.NotFound);
 
-            Group existGroup = _repo.Get(g => g.Name.ToLower() == group.Name.ToLower());
+            Group existGroup = _repo.Get(g => g.Name.Trim().ToLower() == group.Name.Trim().ToLower());
             if (existGroup != null) throw new InvalidGroupException(ResponseMessages.ExistMessage);
-
+            
             _repo.Create(group);
             _count++;
             return group;
@@ -51,17 +51,17 @@ namespace ServiceLayer.Services
         public List<Group> GetAllByTeacherId(int? teacherId)
         {
             if (teacherId is null) throw new InvalidGroupException(ResponseMessages.NotFound);
-            List<Group> dbgroups = _repo.GetAll(g => g.Teacher.Id == teacherId);
-            if (dbgroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
-            return dbgroups;
+            List<Group> dbGroups = _repo.GetAll(g => g.Teacher.Id == teacherId);
+            if (dbGroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
+            return dbGroups;
         }
 
         public List<Group> GetAllByTeacherName(string teacherName)
         {
             if (teacherName is null) throw new InvalidGroupException(ResponseMessages.NotFound);
-            List<Group> dbgroups = _repo.GetAll(g => g.Teacher.Name.ToLower() == teacherName.ToLower());
-            if (dbgroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
-            return dbgroups;
+            List<Group> dbGroups = _repo.GetAll(g => g.Teacher.Name.Trim().ToLower() == teacherName.Trim().ToLower());
+            if (dbGroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
+            return dbGroups;
         }
 
         public Group GetById(int? id)
@@ -82,7 +82,7 @@ namespace ServiceLayer.Services
         public List<Group> SearchByName(string searchText)
         {
             if (String.IsNullOrWhiteSpace(searchText)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
-            List<Group> groups = _repo.GetAll(g => g.Name.ToLower().Contains(searchText.ToLower()));
+            List<Group> groups = _repo.GetAll(g => g.Name.Trim().ToLower().Contains(searchText.Trim().ToLower()));
             if (groups.Count == 0) throw new InvalidTeacherException(ResponseMessages.NotFound);
             return groups;
         }
@@ -94,11 +94,10 @@ namespace ServiceLayer.Services
             if (dbGroup != null)
             {
                 group.Id = (int)id;
-                if(String.IsNullOrWhiteSpace(group.Name))
-                    group.Name = dbGroup.Name;
-                dbGroup.Name= group.Name;
-
-                if(group.Capacity == null)
+                if (String.IsNullOrWhiteSpace(group.Name))
+                    group.Name = dbGroup.Name.Trim();
+                dbGroup.Name = String.Concat(group.Name[0].ToString().ToUpper()) + group.Name.Substring(1).ToLower(); ;
+                if (group.Capacity == null)
                     group.Capacity = dbGroup.Capacity;
                 dbGroup.Capacity = group.Capacity;
 

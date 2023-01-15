@@ -49,7 +49,7 @@ namespace ServiceLayer.Services
         public List<Teacher> SearchByNameAndSurname(string searchText)
         {
             if (String.IsNullOrWhiteSpace(searchText)) throw new InvalidTeacherException(ResponseMessages.StringMessage);
-            List<Teacher> teachers = _repo.GetAll(t => t.Name.ToLower().Contains(searchText.ToLower()) || t.Surname.ToLower().Contains(searchText.ToLower()));
+            List<Teacher> teachers = _repo.GetAll(t => t.Name.Trim().ToLower().Contains(searchText.Trim().ToLower()) || t.Surname.ToLower().Contains(searchText.ToLower()));
             if (teachers.Count == 0) throw new InvalidTeacherException(ResponseMessages.NotFound);
             return teachers;
         }

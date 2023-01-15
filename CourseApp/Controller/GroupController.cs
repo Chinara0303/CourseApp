@@ -301,24 +301,27 @@ namespace CourseApp.Controller
 
         public void Update()
         {
-            ConsoleColor.Cyan.WriteConsole("Please,enter group id ");
+            ConsoleColor.Cyan.WriteConsole("Please,enter group id");
         Id: string idStr = Console.ReadLine();
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
           
             if (!isCorrectId || id < 0)
             {
-                ConsoleColor.Red.WriteConsole("Please, enter correct format option number");
+                ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
             }
             else
             {
                 ConsoleColor.Cyan.WriteConsole("Please, enter group name" + msgForEmptyInput);
-                goto GroupName;
-            GroupName: string groupName = Console.ReadLine();
+                string groupName = Console.ReadLine();
 
-                ConsoleColor.Cyan.WriteConsole("Please, enter group capacity / If you don't want to change, enter the previous capacity");
+                ConsoleColor.Cyan.WriteConsole("Please, enter group capacity");
             Capacity: string capacityStr = Console.ReadLine();
+                //if (String.IsNullOrWhiteSpace(capacityStr))
+                //{
+
+                //}
                 int capacity;
                 bool IsCorrectCapacity = int.TryParse(capacityStr, out capacity);
 
@@ -338,7 +341,7 @@ namespace CourseApp.Controller
                 int teacherId;
                 bool isCorrectTeacherId = int.TryParse(teacherIdStr, out teacherId);
 
-                if(!isCorrectTeacherId|| teacherId < 0)
+                if(!isCorrectTeacherId || teacherId < 0)
                 {
                     ConsoleColor.Red.WriteConsole("Please, enter correct format teacher id ");
                     goto TeacherId;
