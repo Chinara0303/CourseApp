@@ -1,10 +1,5 @@
 ﻿using ServiceLayer.Helpers.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Helpers.Extentions
 {
@@ -26,6 +21,15 @@ namespace ServiceLayer.Helpers.Extentions
             }
             return false;
         }
+        public static bool CheckNumEqualZero(this int id)
+        {
+            if (id == 0)
+            {
+                ConsoleColor.Red.WriteConsole(ResponseMessages.EqualToZeroMessage + ResponseMessages.EnterAgainMessage);
+                return true;
+            }
+            return false;
+        } 
     }
 
 }

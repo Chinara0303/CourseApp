@@ -5,11 +5,10 @@ using Spectre.Console;
 
 TeacherController teacherController = new();
 GroupController groupController = new();
+AnsiConsole.Write(new FigletText("Hi, P135!").Color(Color.Red3));
+
 while (true)
 {
-    AnsiConsole.Write(
-    new FigletText("Hi, P135!")
-        .Color(Color.Red3));
     GetConsole();
     Option: string optionStr = Console.ReadLine();
     int optionNum;
@@ -19,10 +18,10 @@ while (true)
         switch (optionNum)
         {
             case (int)Options.TeacherOptions:
+                Console.Clear();
                 GetTeacherOptions();
             TeacherOption: string teacherOptionStr = Console.ReadLine();
                 int teacherOption;
-
                 bool isCorrectTeacherOption = int.TryParse(teacherOptionStr, out teacherOption);
                 if (isCorrectTeacherOption)
                 {
@@ -48,6 +47,12 @@ while (true)
                         case (int)Options.UpdateTeacher:
                             teacherController.Update();
                             break;
+                        case (int)Options.BackToTeacherOptions:
+                            Console.Clear();
+                            break;
+                        default:
+                            ConsoleColor.Red.WriteConsole("Please, enter correct teacher option");
+                            goto TeacherOption;
                     }
                 }
                 else
@@ -57,11 +62,12 @@ while (true)
                 }
                 break;
             case (int)Options.GroupOptions:
+                Console.Clear();
                 GetGroupOption();
                GroupOption: string groupOptionStr = Console.ReadLine();
                 int groupOption;
                 bool isCorrectGroupOption = int.TryParse(groupOptionStr, out groupOption);
-                if (isCorrectGroupOption)
+                if (isCorrectGroupOption && groupOption > 0)
                 {
                     switch (groupOption)
                     {
@@ -92,9 +98,12 @@ while (true)
                         case (int)Options.GetAllGroupsByCount:
                             groupController.GetCount();
                             break;
-                        default:
-                            ConsoleColor.Red.WriteConsole("Please, enter correct option");
+                        case (int)Options.BackToGroupOptions:
+                            Console.Clear();
                             break;
+                        default:
+                            ConsoleColor.Red.WriteConsole("Please, enter correct group option");
+                            goto GroupOption;
                     }
                 }
                 else
@@ -103,8 +112,16 @@ while (true)
                     goto GroupOption;
                 }
                 break;
+        default:
+            ConsoleColor.Red.WriteConsole("Please, enter correct option");
+            break;
         }
     }
+    //else if(optionNum >= 0 && optionNum < 3)
+    //{
+    //    ConsoleColor.Red.WriteConsole("Please, enter correct option");
+    //    goto Option;
+    //}
     else
     {
         ConsoleColor.Red.WriteConsole("Please, enter correct format option");
@@ -118,19 +135,17 @@ static void GetConsole()
     ConsoleColor.White.WriteConsole("Please, choose one option");
     ConsoleColor.DarkCyan.WriteConsole("1-Teacher options");
     ConsoleColor.DarkCyan.WriteConsole("2-Group options");
-   
-   
 }
 static void GetTeacherOptions()
 {
     ConsoleColor.DarkCyan.WriteConsole
-       ("\n1-Create\n2-Delete\n3-Get all\n4-Get by id\n5-Search by name and surname\n6-Update");
+       ("Teacher options: \n1-Create\n2-Delete\n3-Get all\n4-Get by id\n5-Search by name and surname\n6-Update\n7-Back to menu");
 }
 static void GetGroupOption()
 {
     ConsoleColor.DarkCyan.WriteConsole
-       ("\n1-Create\n2-Update\n3-Get by id\n4-Delete" +
+       ("Group options: \n1-Create\n2-Update\n3-Get by id\n4-Delete" +
        "\n5-Get groups by capacity\n6-Get groups by teacherId " +
-       "\n7-Get all groups  by teacherName\n8-Search method for group by name\n9-Get all groups count"
+       "\n7-Get all groups  by teacherName\n8-Search method for group by name\n9-Get all groups count,\n10-Back to menu"
        );
 }

@@ -16,6 +16,7 @@ namespace ServiceLayer.Helpers.Enums
         GetTeacherById,
         SearchNameAndSurnameByTeacher,
         UpdateTeacher,
+        BackToTeacherOptions,
         CreateGroup =1,
         UpdateGroup,
         GetGroupById,
@@ -24,6 +25,7 @@ namespace ServiceLayer.Helpers.Enums
         GetAllGroupsByTeacherId,
         GetAllGroupsByTeacherName,
         SearchForGroupByName,
-        GetAllGroupsByCount
+        GetAllGroupsByCount,
+        BackToGroupOptions
     }
 }

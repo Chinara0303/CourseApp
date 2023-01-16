@@ -1,8 +1,6 @@
 ﻿using DomainLayer.Models;
 using Repository.Data;
 using Repository.Repositories.Interfaces;
-using System.Text.RegularExpressions;
-using Group = DomainLayer.Models.Group;
 
 namespace Repository.Repositories
 {
@@ -42,7 +40,7 @@ namespace Repository.Repositories
 
             if (String.IsNullOrWhiteSpace(entity.Name))
                 entity.Name = dbGroup.Name;
-            dbGroup.Name = String.Concat(entity.Name[0].ToString().ToUpper())+ entity.Name.Substring(1).ToLower();
+            dbGroup.Name = String.Concat(entity.Name[0].ToString().ToUpper(),entity.Name.Substring(1).ToLower());
             
             if(entity.Capacity == 0)
                 entity.Capacity = dbGroup.Capacity;
