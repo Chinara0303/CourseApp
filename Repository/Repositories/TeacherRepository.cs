@@ -36,6 +36,29 @@ namespace Repository.Repositories
         public void Update(Teacher entity)
         {
             if (entity == null) throw new ArgumentNullException();
+
+            var dbTeacher = Get(t => t.Id == entity.Id);
+            if (dbTeacher == null) throw new ArgumentNullException();
+
+            if (String.IsNullOrWhiteSpace(entity.Name))
+                    entity.Name = dbTeacher.Name;
+            dbTeacher.Name = String.Concat(entity.Name[0].ToString().ToUpper()) + entity.Name.Substring(1).ToLower();
+
+            if (String.IsNullOrWhiteSpace(entity.Surname))
+                entity.Surname = dbTeacher.Surname;
+            dbTeacher.Surname = String.Concat(dbTeacher.Surname[0].ToString().ToUpper()) + dbTeacher.Surname.Substring(1).ToLower();
+
+            if (String.IsNullOrWhiteSpace(entity.Address))
+                entity.Address = dbTeacher.Address;
+            dbTeacher.Address = String.Concat(dbTeacher.Address[0].ToString().ToUpper()) + dbTeacher.Address.Substring(1).ToLower();
+            if (entity.Age == null)
+            {
+                entity.Age = dbTeacher.Age;
+            }
+            else
+            {
+                dbTeacher.Age = entity.Age;
+            }
         }
     }
 }

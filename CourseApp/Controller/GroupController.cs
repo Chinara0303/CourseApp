@@ -46,7 +46,7 @@ namespace CourseApp.Controller
         Capacity: string capacityStr = Console.ReadLine();
             int capacity;
             bool isCorrectCapacity = int.TryParse(capacityStr, out capacity);
-            if (!isCorrectCapacity && capacity < 0)
+            if (!isCorrectCapacity || capacity < 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format capacity number");
                 goto Capacity;
@@ -69,12 +69,12 @@ namespace CourseApp.Controller
             {
                 try
                 {
-                    DomainLayer.Models.Group group = new DomainLayer.Models.Group()
-                    {
+                   Group group = new Group()
+                   {
                         Name = groupName,
                         Capacity = capacity,
                         CreateDate = DateTime.Now,
-                    };
+                   };
                     _service.Create(id, group);
                     ConsoleColor.Green.WriteConsole
                     (
@@ -86,8 +86,7 @@ namespace CourseApp.Controller
                 }
                 catch (Exception ex)
                 {
-                    ConsoleColor.Red.WriteConsole(ex.Message + msg);
-                    goto Id;
+                    ConsoleColor.Red.WriteConsole(ex.Message);
                 }
             }
         }
@@ -113,7 +112,6 @@ namespace CourseApp.Controller
                 catch (Exception ex)
                 {
                     ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto Id;
                 }
             }
         }
@@ -124,7 +122,7 @@ namespace CourseApp.Controller
             int capacity;
             bool isCorrectCapacity = int.TryParse(capacityStr, out capacity);
 
-            if (!isCorrectCapacity && capacity < 0)
+            if (!isCorrectCapacity || capacity < 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Capacity;
@@ -134,7 +132,7 @@ namespace CourseApp.Controller
                 try
                 {
                     var groups = _service.GetAllByCapacity(capacity);
-                    foreach (DomainLayer.Models.Group group in groups)
+                    foreach (Group group in groups)
                     {
                         ConsoleColor.Green.WriteConsole
                         (
@@ -148,7 +146,6 @@ namespace CourseApp.Controller
                 catch (Exception ex)
                 {
                     ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto Capacity;
                 }
             }
         }
@@ -184,7 +181,6 @@ namespace CourseApp.Controller
                 catch (Exception ex)
                 {
                     ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto Id;
                 }
             }
         }
@@ -216,7 +212,6 @@ namespace CourseApp.Controller
                 catch (Exception ex)
                 {
                     ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto TeacherName;
                 }
             }
         }
@@ -248,7 +243,6 @@ namespace CourseApp.Controller
                 catch (Exception ex)
                 {
                     ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto SearchText;
                 }
             }
         }
@@ -259,7 +253,7 @@ namespace CourseApp.Controller
             int id;
             bool isCorrectId = int.TryParse(IdStr, out id);
 
-            if (!isCorrectId)
+            if (!isCorrectId || id < 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
@@ -281,7 +275,6 @@ namespace CourseApp.Controller
                 catch (Exception ex)
                 {
                     ConsoleColor.Red.WriteConsole(ex.Message);
-                    goto Id;
                 }
             }
         }
@@ -305,7 +298,7 @@ namespace CourseApp.Controller
         Id: string idStr = Console.ReadLine();
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
-          
+           
             if (!isCorrectId || id < 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
@@ -318,55 +311,43 @@ namespace CourseApp.Controller
 
                 ConsoleColor.Cyan.WriteConsole("Please, enter group capacity");
             Capacity: string capacityStr = Console.ReadLine();
-                //if (String.IsNullOrWhiteSpace(capacityStr))
-                //{
-
-                //}
                 int capacity;
                 bool IsCorrectCapacity = int.TryParse(capacityStr, out capacity);
-
+                  
                 if (!IsCorrectCapacity || capacity < 0)
                 {
                     ConsoleColor.Red.WriteConsole("Please, enter correct format capacity");
                     goto Capacity;
                 }
-                else if(capacity > 20)
+                else if (capacity > 20)
                 {
                     ConsoleColor.Red.WriteConsole("Can not be greater than 20" + msg);
                     goto Capacity;
                 }
-                
                 ConsoleColor.Cyan.WriteConsole("Please, enter teacher id / If you don't want to change, enter the previous teacher id ");
             TeacherId: string teacherIdStr = Console.ReadLine();
                 int teacherId;
                 bool isCorrectTeacherId = int.TryParse(teacherIdStr, out teacherId);
 
-                if(!isCorrectTeacherId || teacherId < 0)
+                var existTeacher = _serviceTeacher.GetById(teacherId);
+                if (existTeacher == null) throw new InvalidGroupException(ResponseMessages.NotFound);
+                //if (String.IsNullOrWhiteSpace(teacherIdStr))
+                //    teacherId = (int)existTeacher.Id;
+                //    existTeacher.Id = teacherId;
+                Group newGroup = new Group()
+                {
+                    Name = groupName,
+                    Capacity = capacity,
+                    Teacher = existTeacher
+                };
+                Group group = new();
+                group = _service.Update(id, newGroup);
+                ConsoleColor.Green.WriteConsole($"Successfully updated {group.Name} {group.Teacher.Id}");
+                if (!isCorrectTeacherId || teacherId < 0)
                 {
                     ConsoleColor.Red.WriteConsole("Please, enter correct format teacher id ");
                     goto TeacherId;
                 }
-                try
-                {
-                    var existTeacher = _serviceTeacher.GetById(teacherId);
-                    if (existTeacher == null) throw new InvalidGroupException(ResponseMessages.NotFound);
-
-                    Group newGroup = new Group()
-                    {
-                        Name = groupName,
-                        Capacity = capacity,
-                        Teacher = existTeacher
-                    };
-                    Group group = new();
-                    group = _service.Update(id, newGroup);
-                    ConsoleColor.Green.WriteConsole($"Successfully updated {group.Name} {group.Teacher.Id}");
-                }
-                catch (Exception ex)
-                {
-                    ConsoleColor.Red.WriteConsole(ex.Message + msg);
-                    goto Id;
-                }
-                    
             }
            
         }

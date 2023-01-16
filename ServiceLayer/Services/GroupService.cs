@@ -43,9 +43,9 @@ namespace ServiceLayer.Services
         public List<Group> GetAllByCapacity(int? capacity)
         {
             if (capacity is null) throw new InvalidGroupException(ResponseMessages.NotFound);
-            List<Group> dbgroups = _repo.GetAll(g => g.Capacity == capacity);
-            if (dbgroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
-            return dbgroups;
+            List<Group> dbGroups = _repo.GetAll(g => g.Capacity == capacity);
+            if (dbGroups.Count == 0) throw new InvalidGroupException(ResponseMessages.NotFound);
+            return dbGroups;
         }
 
         public List<Group> GetAllByTeacherId(int? teacherId)
@@ -90,23 +90,10 @@ namespace ServiceLayer.Services
         public Group Update(int? id, Group group)
         {
             if (id is null) throw new InvalidGroupException(ResponseMessages.NotFound);
-            Group dbGroup = GetById(id);
-            if (dbGroup != null)
-            {
-                group.Id = (int)id;
-                if (String.IsNullOrWhiteSpace(group.Name))
-                    group.Name = dbGroup.Name.Trim();
-                dbGroup.Name = String.Concat(group.Name[0].ToString().ToUpper()) + group.Name.Substring(1).ToLower(); ;
-                if (group.Capacity == null)
-                    group.Capacity = dbGroup.Capacity;
-                dbGroup.Capacity = group.Capacity;
-
-                _repo.Update(group);
-            }
-            else
-            {
-               throw new InvalidTeacherException(ResponseMessages.NotFound);
-            }
+          
+            group.Id = (int)id;
+            _repo.Update(group);
+           
             return group;
         }
     }
