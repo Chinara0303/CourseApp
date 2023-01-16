@@ -8,13 +8,15 @@ namespace ServiceLayer.Helpers.Enums
 {
     public enum Options
     {
-        CreateTeacher=1,
+        TeacherOptions =1,
+        GroupOptions,
+        CreateTeacher = 1,
         Deleteteacher,
         GetAllTeacher,
         GetTeacherById,
         SearchNameAndSurnameByTeacher,
         UpdateTeacher,
-        CreateGroup,
+        CreateGroup =1,
         UpdateGroup,
         GetGroupById,
         DeleteGroup,

@@ -12,5 +12,7 @@ namespace ServiceLayer.Helpers.Constants
         public const string StringMessage = "Can not be empty";
         public const string StringCharacterMessage = "Cannot be a character";
         public const string ExistMessage = "Data already exist";
+        public const string EnterAgainMessage = " / Please enter again";
+        public const string ForEmptyInputMessage = " / Please enter again";
     }
 }

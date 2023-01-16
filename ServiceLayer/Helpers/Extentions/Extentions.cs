@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ServiceLayer.Helpers.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ServiceLayer.Helpers.Extentions
@@ -13,6 +15,16 @@ namespace ServiceLayer.Helpers.Extentions
             Console.ForegroundColor = color;
             Console.WriteLine(text);
             Console.ResetColor();
+        }
+        public static bool CheckSymbol(this string text)
+        {
+            string pattern = @"[^A-Za-z]";
+            if(Regex.IsMatch(text, pattern))
+            {
+                ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + ResponseMessages.EnterAgainMessage);
+                return true;
+            }
+            return false;
         }
     }
 

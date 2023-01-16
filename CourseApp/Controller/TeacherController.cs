@@ -20,10 +20,10 @@ namespace CourseApp.Controller
     {
         private readonly ITeacherService _service;
         public TeacherController() => _service = new TeacherService();
-        string msg = " / Please enter again";
-        string msgForEmptyInput = " / If you leave it blank, there will be no change";
-        string pattern = "^(?!\\s+$)[a-zA-Z'.-]+$";
-        
+
+        //string pattern = "^(?!\\s+$)[a-zA-Z'.-]+$";
+        //string pattern = @"[^A-Za-z]";
+
         public void Create()
         {
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
@@ -31,12 +31,11 @@ namespace CourseApp.Controller
 
             if (String.IsNullOrWhiteSpace(teacherName))
             {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + ResponseMessages.EnterAgainMessage);
                 goto TeacherName;
             }
-            else if (!Regex.IsMatch(teacherName, pattern))
+            else if (teacherName.CheckSymbol())
             {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
                 goto TeacherName;
             }
           
@@ -45,12 +44,11 @@ namespace CourseApp.Controller
           
             if (String.IsNullOrWhiteSpace(teacherSurname))
             {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + ResponseMessages.EnterAgainMessage);
                 goto TeacherSurname;
             }
-            else if (!Regex.IsMatch(teacherSurname, pattern))
+            else if (teacherSurname.CheckSymbol())
             {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
                 goto TeacherSurname;
             }
             
@@ -59,7 +57,7 @@ namespace CourseApp.Controller
           
             if (String.IsNullOrWhiteSpace(teacherAddress))
             {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + "/ Please enter again");
+                ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + ResponseMessages.EnterAgainMessage);
                 goto TeacherAddress;
             }
            
@@ -69,7 +67,7 @@ namespace CourseApp.Controller
          
             int age;
             bool IsCorrectAge = int.TryParse(ageStr, out age);
-            if (!IsCorrectAge || age < 0)
+            if (!IsCorrectAge || age <= 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format age");
                 goto TeacherAge;
@@ -103,7 +101,7 @@ namespace CourseApp.Controller
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
 
-            if (!isCorrectId && id<0)
+            if (!isCorrectId && id<=0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
@@ -141,7 +139,7 @@ namespace CourseApp.Controller
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
 
-            if (!isCorrectId || id < 0)
+            if (!isCorrectId || id <= 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
@@ -155,7 +153,7 @@ namespace CourseApp.Controller
                 }
                 catch (Exception ex)
                 {
-                    ConsoleColor.Red.WriteConsole(ex.Message + msg);
+                    ConsoleColor.Red.WriteConsole(ex.Message + ResponseMessages.EnterAgainMessage);
                     goto Id;
                 }
             }
@@ -168,14 +166,13 @@ namespace CourseApp.Controller
             {
                 if (String.IsNullOrWhiteSpace(searchText))
                 {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + ResponseMessages.EnterAgainMessage);
                     goto Searchtext;
                 }
-                //else if (Regex.IsMatch(searchText, pattern))
-                //{
-                //    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
-                //    goto Searchtext;
-                //}
+                else if (searchText.CheckSymbol())
+                {
+                    goto Searchtext;
+                }
                 List<Teacher> result = _service.SearchByNameAndSurname(searchText);
                 if (result.Count == 0)
                 {
@@ -188,7 +185,7 @@ namespace CourseApp.Controller
             }
             catch (Exception ex)
             {
-                ConsoleColor.Red.WriteConsole(ex.Message + msg);
+                ConsoleColor.Red.WriteConsole(ex.Message);
             }
         }
         public void Update()
@@ -209,16 +206,22 @@ namespace CourseApp.Controller
                 Teacher dbTeacher = _service.GetById(id);
                 if (dbTeacher is null) throw new InvalidTeacherException(ResponseMessages.NotFound);
 
-                ConsoleColor.Cyan.WriteConsole("Please, enter teacher name" + msgForEmptyInput);
-                string teacherName = Console.ReadLine();
-
-                ConsoleColor.Cyan.WriteConsole("Please, enter teacher surname" + msgForEmptyInput);
-                string teacherSurname = Console.ReadLine();
-
-                ConsoleColor.Cyan.WriteConsole("Please, enter teacher address" + msgForEmptyInput);
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher name" + ResponseMessages.EnterAgainMessage);
+                TeacherName: string teacherName = Console.ReadLine();
+                if (teacherName.CheckSymbol())
+                {
+                    goto TeacherName;
+                }
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher surname" + ResponseMessages.ForEmptyInputMessage);
+                TeacherSurname: string teacherSurname = Console.ReadLine();
+                if (teacherSurname.CheckSymbol())
+                {
+                    goto TeacherSurname;
+                }
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher address" + ResponseMessages.ForEmptyInputMessage);
                 string teacherAddress = Console.ReadLine();
 
-                ConsoleColor.Cyan.WriteConsole("Please, enter teacher age" + msgForEmptyInput);
+                ConsoleColor.Cyan.WriteConsole("Please, enter teacher age" + ResponseMessages.ForEmptyInputMessage);
                 Age: string ageStr = Console.ReadLine();
                 int age;
                 int checkNum = 0;
@@ -243,13 +246,12 @@ namespace CourseApp.Controller
                     Age = age
                 };
                 Teacher teacher1 = new();
-                teacher1 = _service.Update(id, teacher);
+                teacher1 = _service.Update(id, teacher);    
                 ConsoleColor.Green.WriteConsole("Successfully updated");
             }
             catch (Exception ex)
             {
-                ConsoleColor.Red.WriteConsole(ex.Message + msg);
-                goto Id;
+                ConsoleColor.Red.WriteConsole(ex.Message);
             }
         }
     }

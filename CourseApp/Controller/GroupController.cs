@@ -15,9 +15,7 @@ namespace CourseApp.Controller
         private readonly ITeacherService _serviceTeacher = new TeacherService();
         public GroupController() => _service = new GroupService();
 
-        string pattern = "^(?!\\s+$)['.-]+$";
-        string msg = " / Please enter again";
-        string msgForEmptyInput = " / If you leave it blank, there will be no change";
+       
 
         public void Create()
         {
@@ -27,12 +25,11 @@ namespace CourseApp.Controller
             {
                 if (String.IsNullOrWhiteSpace(groupName))
                 {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + msg);
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringMessage + ResponseMessages.EnterAgainMessage);
                     goto GroupName;
                 }
-                else if (Regex.IsMatch(groupName, pattern))
+                else if (groupName.CheckSymbol())
                 {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + msg);
                     goto GroupName;
                 }
             }
@@ -53,7 +50,7 @@ namespace CourseApp.Controller
             }
             else if(capacity > 20)
             {
-                ConsoleColor.Red.WriteConsole("Can not be greater than 20" + msg);
+                ConsoleColor.Red.WriteConsole("Can not be greater than 20" + ResponseMessages.EnterAgainMessage);
                 goto Capacity;
             }
                 ConsoleColor.Cyan.WriteConsole("Please, enter teacher id for group");
@@ -67,9 +64,9 @@ namespace CourseApp.Controller
             else
             {
                 bool isCorrectId = int.TryParse(idStr, out id);
-                if (!isCorrectId && id < 0)
+                if (!isCorrectId && id <= 0)
                 {
-                    ConsoleColor.Red.WriteConsole("Please, enter correct format id" + msg);
+                    ConsoleColor.Red.WriteConsole("Please, enter correct format id" + ResponseMessages.EnterAgainMessage);
                     goto Id;
                 }
             }
@@ -85,8 +82,8 @@ namespace CourseApp.Controller
                 ConsoleColor.Green.WriteConsole
                 (
                     $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                    $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
-                    $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                    $" Create date:{group.CreateDate.ToString("MM.dd.yyyy")}," +
+                    $" Teacher Info:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
                     $"{group.Teacher.Age},{group.Teacher.Address}"
                 );
             }
@@ -102,7 +99,7 @@ namespace CourseApp.Controller
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
 
-            if (!isCorrectId && id < 0)
+            if (!isCorrectId && id <= 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
@@ -127,7 +124,7 @@ namespace CourseApp.Controller
             int capacity;
             bool isCorrectCapacity = int.TryParse(capacityStr, out capacity);
 
-            if (!isCorrectCapacity || capacity < 0)
+            if (!isCorrectCapacity || capacity <= 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Capacity;
@@ -142,8 +139,8 @@ namespace CourseApp.Controller
                         ConsoleColor.Green.WriteConsole
                         (
                           $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                          $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
-                          $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $" Create date:{group.CreateDate.ToString("MM.dd.yyyy")}," +
+                          $" Teacher info:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
                           $"{group.Teacher.Age},{group.Teacher.Address}"
                         );
                     }
@@ -161,7 +158,7 @@ namespace CourseApp.Controller
             int id;
             bool isCorrectTeacherId = int.TryParse(teacherIdStr, out id);
 
-            if (!isCorrectTeacherId && id < 0)
+            if (!isCorrectTeacherId && id <= 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
@@ -177,8 +174,8 @@ namespace CourseApp.Controller
                         ConsoleColor.Green.WriteConsole
                         (
                           $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                          $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
-                          $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $" Create date:{group.CreateDate.ToString("MM.dd.yyyy")}," +
+                          $" Teacher info: {group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
                           $"{group.Teacher.Age},{group.Teacher.Address}"
                         );
                     }
@@ -195,7 +192,7 @@ namespace CourseApp.Controller
             TeacherName: string teacherName = Console.ReadLine();
             if (String.IsNullOrWhiteSpace(teacherName))
             {
-                ConsoleColor.Red.WriteConsole(msgForEmptyInput + msg);
+                ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + ResponseMessages.EnterAgainMessage);
                 goto TeacherName;
             }
             else
@@ -208,8 +205,8 @@ namespace CourseApp.Controller
                         ConsoleColor.Green.WriteConsole
                         (
                           $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                          $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
-                          $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $" Create date:{group.CreateDate.ToString("MM.dd.yyyy")}," +
+                          $" Teacher info:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
                           $"{group.Teacher.Age},{group.Teacher.Address}"
                         );
                     }
@@ -226,7 +223,7 @@ namespace CourseApp.Controller
         SearchText: string searchText = Console.ReadLine();
             if (String.IsNullOrWhiteSpace(searchText))
             {
-                ConsoleColor.Red.WriteConsole(msgForEmptyInput + msg);
+                ConsoleColor.Red.WriteConsole(ResponseMessages.StringCharacterMessage + ResponseMessages.EnterAgainMessage);
                 goto SearchText;
             }
             else
@@ -239,8 +236,8 @@ namespace CourseApp.Controller
                         ConsoleColor.Green.WriteConsole
                         (
                           $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                          $"Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
-                          $"Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                          $"Create date:{group.CreateDate.ToString("MM.dd.yyyy")}," +
+                          $"Teacher info: {group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
                           $"{group.Teacher.Age},{group.Teacher.Address}"
                         );
                     }
@@ -258,7 +255,7 @@ namespace CourseApp.Controller
             int id;
             bool isCorrectId = int.TryParse(IdStr, out id);
 
-            if (!isCorrectId || id < 0)
+            if (!isCorrectId || id <= 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
@@ -271,8 +268,8 @@ namespace CourseApp.Controller
                     ConsoleColor.Green.WriteConsole
                     (
                         $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                        $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
-                        $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                        $" Create date:{group.CreateDate.ToString("MM.dd.yyyy")}," +
+                        $" Teacher info: {group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
                         $"{group.Teacher.Age},{group.Teacher.Address}"
                    );
                    
@@ -288,7 +285,7 @@ namespace CourseApp.Controller
             try
             {
                 int number = _service.GetCount();
-                ConsoleColor.Green.WriteConsole($"Group Count:{number}");
+                ConsoleColor.Green.WriteConsole($"Group Count: {number}");
             }
             catch (Exception ex)
             {
@@ -319,7 +316,7 @@ namespace CourseApp.Controller
                 goto Id;
             }
            
-            ConsoleColor.Cyan.WriteConsole("Please, enter group name" + msgForEmptyInput);
+            ConsoleColor.Cyan.WriteConsole("Please, enter group name" + ResponseMessages.EnterAgainMessage);
             string groupName = Console.ReadLine();
 
             ConsoleColor.Cyan.WriteConsole("Please, enter group capacity");
@@ -334,7 +331,7 @@ namespace CourseApp.Controller
             {
                 bool IsCorrectCapacity = int.TryParse(capacityStr, out capacity);
 
-                if (!IsCorrectCapacity || capacity < 0)
+                if (!IsCorrectCapacity || capacity <= 0)
                 {
                     ConsoleColor.Red.WriteConsole("Please, enter correct format capacity");
                     goto Capacity;
@@ -342,9 +339,10 @@ namespace CourseApp.Controller
             }
             if (capacity > 20)
             {
-                ConsoleColor.Red.WriteConsole("Can not be greater than 20" + msg);
+                ConsoleColor.Red.WriteConsole("Can not be greater than 20" + ResponseMessages.EnterAgainMessage);
                 goto Capacity;
             }
+
             ConsoleColor.Cyan.WriteConsole("Please, enter teacher id / If you don't want to change, enter the previous teacher id ");
         TeacherId: string teacherIdStr = Console.ReadLine();
             int teacherId;
@@ -357,7 +355,7 @@ namespace CourseApp.Controller
             {
                 bool isCorrectTeacherId = int.TryParse(teacherIdStr, out teacherId);
 
-                if (!isCorrectTeacherId || teacherId < 0)
+                if (!isCorrectTeacherId || teacherId <= 0)
                 {
                     ConsoleColor.Red.WriteConsole("Please, enter correct format teacher id ");
                     goto TeacherId;
@@ -375,31 +373,27 @@ namespace CourseApp.Controller
                     };
                     Group group = new();
                     group = _service.Update(id, newGroup);
-                    ConsoleColor.Green.WriteConsole($"Successfully updated {group.Name} {group.Teacher.Id}");
+                    ConsoleColor.Green.WriteConsole($"Successfully updated");
                 }
                 else
                 {
                     Teacher existTeacher = _serviceTeacher.GetById(teacherId);
                     if (existTeacher == null) throw new ArgumentNullException();
-                    Group newGroup1 = new Group()
+                    Group newGroup = new Group()
                     {
                         Name = groupName,
                         Capacity = capacity,
                         Teacher = existTeacher
                     };
-                    Group group1 = new();
-                    group1 = _service.Update(id, newGroup1);
-                    ConsoleColor.Green.WriteConsole($"Successfully updated {group1.Name} {group1.Teacher.Id}");
+                    Group group = new();
+                    group = _service.Update(id, newGroup);
+                    ConsoleColor.Green.WriteConsole($"Successfully updated {group.Name} {group.Teacher.Id}");
                 }
-               
-               
             }
             catch (Exception ex)
             {
                 ConsoleColor.Red.WriteConsole(ex.Message);
             }
-            
-           
         }
     }
 }
