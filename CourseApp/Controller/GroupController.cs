@@ -59,35 +59,40 @@ namespace CourseApp.Controller
                 ConsoleColor.Cyan.WriteConsole("Please, enter teacher id for group");
             Id: string idStr =  Console.ReadLine();
             int id;
-            bool isCorrectId = int.TryParse(idStr, out id);
-            if (!isCorrectId && id < 0)
+            int checkId = 0;
+            if (String.IsNullOrWhiteSpace(idStr))
             {
-                ConsoleColor.Red.WriteConsole("Please, enter correct format id" + msg);
-                goto Id;
+                id = checkId;
             }
             else
             {
-                try
+                bool isCorrectId = int.TryParse(idStr, out id);
+                if (!isCorrectId && id < 0)
                 {
-                   Group group = new Group()
-                   {
-                        Name = groupName,
-                        Capacity = capacity,
-                        CreateDate = DateTime.Now,
-                   };
-                    _service.Create(id, group);
-                    ConsoleColor.Green.WriteConsole
-                    (
-                        $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
-                        $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
-                        $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
-                        $"{group.Teacher.Age},{group.Teacher.Address}"
-                    );
+                    ConsoleColor.Red.WriteConsole("Please, enter correct format id" + msg);
+                    goto Id;
                 }
-                catch (Exception ex)
+            }
+            try
+            {
+                Group group = new Group()
                 {
-                    ConsoleColor.Red.WriteConsole(ex.Message);
-                }
+                    Name = groupName,
+                    Capacity = capacity,
+                    CreateDate = DateTime.Now,
+                };
+                _service.Create(id, group);
+                ConsoleColor.Green.WriteConsole
+                (
+                    $"Id:{group.Id}, Name:{group.Name}, Capacity:{group.Capacity}," +
+                    $" Create date:{group.CreateDate.ToString("yyyy,MM,dd")}," +
+                    $" Teacher:{group.Teacher.Id},{group.Teacher.Name} {group.Teacher.Surname}," +
+                    $"{group.Teacher.Age},{group.Teacher.Address}"
+                );
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
             }
         }
         public void Delete()
@@ -298,57 +303,102 @@ namespace CourseApp.Controller
         Id: string idStr = Console.ReadLine();
             int id;
             bool isCorrectId = int.TryParse(idStr, out id);
-           
-            if (!isCorrectId || id < 0)
+            try
+            {
+                Group dbGroup = _service.GetById(id);
+                if (dbGroup == null) throw new InvalidGroupException(ResponseMessages.NotFound);
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+                return;
+            }
+            if (!isCorrectId || id <= 0)
             {
                 ConsoleColor.Red.WriteConsole("Please, enter correct format id");
                 goto Id;
             }
+           
+            ConsoleColor.Cyan.WriteConsole("Please, enter group name" + msgForEmptyInput);
+            string groupName = Console.ReadLine();
+
+            ConsoleColor.Cyan.WriteConsole("Please, enter group capacity");
+        Capacity: string capacityStr = Console.ReadLine();
+            int capacity;
+            int checkCap = 0;
+            if (String.IsNullOrWhiteSpace(capacityStr))
+            {
+                capacity = checkCap;
+            }
             else
             {
-                ConsoleColor.Cyan.WriteConsole("Please, enter group name" + msgForEmptyInput);
-                string groupName = Console.ReadLine();
-
-                ConsoleColor.Cyan.WriteConsole("Please, enter group capacity");
-            Capacity: string capacityStr = Console.ReadLine();
-                int capacity;
                 bool IsCorrectCapacity = int.TryParse(capacityStr, out capacity);
-                  
+
                 if (!IsCorrectCapacity || capacity < 0)
                 {
                     ConsoleColor.Red.WriteConsole("Please, enter correct format capacity");
                     goto Capacity;
                 }
-                else if (capacity > 20)
-                {
-                    ConsoleColor.Red.WriteConsole("Can not be greater than 20" + msg);
-                    goto Capacity;
-                }
-                ConsoleColor.Cyan.WriteConsole("Please, enter teacher id / If you don't want to change, enter the previous teacher id ");
-            TeacherId: string teacherIdStr = Console.ReadLine();
-                int teacherId;
+            }
+            if (capacity > 20)
+            {
+                ConsoleColor.Red.WriteConsole("Can not be greater than 20" + msg);
+                goto Capacity;
+            }
+            ConsoleColor.Cyan.WriteConsole("Please, enter teacher id / If you don't want to change, enter the previous teacher id ");
+        TeacherId: string teacherIdStr = Console.ReadLine();
+            int teacherId;
+            int checkTeacherId = 0;
+            if (String.IsNullOrWhiteSpace(teacherIdStr))
+            {
+                teacherId = checkTeacherId;
+            }
+            else
+            {
                 bool isCorrectTeacherId = int.TryParse(teacherIdStr, out teacherId);
 
-                var existTeacher = _serviceTeacher.GetById(teacherId);
-                if (existTeacher == null) throw new InvalidGroupException(ResponseMessages.NotFound);
-                //if (String.IsNullOrWhiteSpace(teacherIdStr))
-                //    teacherId = (int)existTeacher.Id;
-                //    existTeacher.Id = teacherId;
-                Group newGroup = new Group()
-                {
-                    Name = groupName,
-                    Capacity = capacity,
-                    Teacher = existTeacher
-                };
-                Group group = new();
-                group = _service.Update(id, newGroup);
-                ConsoleColor.Green.WriteConsole($"Successfully updated {group.Name} {group.Teacher.Id}");
                 if (!isCorrectTeacherId || teacherId < 0)
                 {
                     ConsoleColor.Red.WriteConsole("Please, enter correct format teacher id ");
                     goto TeacherId;
                 }
             }
+            try
+            {
+                if(teacherId == 0)
+                {
+                    
+                    Group newGroup = new Group()
+                    {
+                        Name = groupName,
+                        Capacity = capacity,
+                    };
+                    Group group = new();
+                    group = _service.Update(id, newGroup);
+                    ConsoleColor.Green.WriteConsole($"Successfully updated {group.Name} {group.Teacher.Id}");
+                }
+                else
+                {
+                    Teacher existTeacher = _serviceTeacher.GetById(teacherId);
+                    if (existTeacher == null) throw new ArgumentNullException();
+                    Group newGroup1 = new Group()
+                    {
+                        Name = groupName,
+                        Capacity = capacity,
+                        Teacher = existTeacher
+                    };
+                    Group group1 = new();
+                    group1 = _service.Update(id, newGroup1);
+                    ConsoleColor.Green.WriteConsole($"Successfully updated {group1.Name} {group1.Teacher.Id}");
+                }
+               
+               
+            }
+            catch (Exception ex)
+            {
+                ConsoleColor.Red.WriteConsole(ex.Message);
+            }
+            
            
         }
     }

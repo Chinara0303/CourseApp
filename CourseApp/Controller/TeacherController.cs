@@ -23,7 +23,7 @@ namespace CourseApp.Controller
         string msg = " / Please enter again";
         string msgForEmptyInput = " / If you leave it blank, there will be no change";
         string pattern = "^(?!\\s+$)[a-zA-Z'.-]+$";
-        string? checkStr = null;
+        
         public void Create()
         {
             ConsoleColor.Cyan.WriteConsole("Please,enter teacher name");
@@ -219,35 +219,32 @@ namespace CourseApp.Controller
                 string teacherAddress = Console.ReadLine();
 
                 ConsoleColor.Cyan.WriteConsole("Please, enter teacher age" + msgForEmptyInput);
-            Age: string ageStr = Console.ReadLine();
+                Age: string ageStr = Console.ReadLine();
                 int age;
+                int checkNum = 0;
                 if (String.IsNullOrWhiteSpace(ageStr))
                 {
-                    checkStr = ageStr;
+                    age = checkNum;
                 }
                 else
                 {
-                    ageStr = checkStr;
                     bool IsCorrectAge = int.TryParse(ageStr, out age);
                     if (!IsCorrectAge || age < 0)
                     {
                         ConsoleColor.Red.WriteConsole("Please, enter correct format age");
                         goto Age;
                     }
-
-                    //checkStr = age.ToString();
-
-                    Teacher teacher = new Teacher()
-                    {
-                        Name = teacherName,
-                        Surname = teacherSurname,
-                        Address = teacherAddress,
-                        Age = age
-                    };
-                    Teacher teacher1 = new();
-                    teacher1 = _service.Update(id, teacher);
-                    ConsoleColor.Green.WriteConsole("Successfully updated");
                 }
+                Teacher teacher = new Teacher()
+                {
+                    Name = teacherName,
+                    Surname = teacherSurname,
+                    Address = teacherAddress,
+                    Age = age
+                };
+                Teacher teacher1 = new();
+                teacher1 = _service.Update(id, teacher);
+                ConsoleColor.Green.WriteConsole("Successfully updated");
             }
             catch (Exception ex)
             {

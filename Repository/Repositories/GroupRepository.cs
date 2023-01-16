@@ -8,6 +8,11 @@ namespace Repository.Repositories
 {
     public class GroupRepository : IRepository<Group>
     {
+        private readonly TeacherRepository _repoTeacher;
+        public GroupRepository()
+        {
+            _repoTeacher= new TeacherRepository();
+        }
         public void Create(Group entity)
         {
             if (entity is null) throw new ArgumentNullException();
@@ -34,13 +39,23 @@ namespace Repository.Repositories
         {
            if(entity is null) throw new ArgumentNullException();
             var dbGroup = Get(g => g.Id == entity.Id);
-
             if (dbGroup == null) throw new ArgumentNullException();
+
+            if(entity.Teacher == null)
+            {
+                entity.Teacher = dbGroup.Teacher;
+            }
+            else
+            {
+                dbGroup.Teacher = entity.Teacher;
+            }
             if (String.IsNullOrWhiteSpace(entity.Name))
                 entity.Name = dbGroup.Name;
-            dbGroup.Name = String.Concat(entity.Name[0].ToString().ToUpper()) + entity.Name.Substring(1).ToLower();
-
-            dbGroup.Teacher = entity.Teacher;
+            dbGroup.Name = String.Concat(entity.Name[0].ToString().ToUpper())+ entity.Name.Substring(1).ToLower();
+            
+            if(entity.Capacity == 0)
+                entity.Capacity = dbGroup.Capacity;
+            dbGroup.Capacity = entity.Capacity;
         }
     }
 }

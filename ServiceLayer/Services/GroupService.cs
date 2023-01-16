@@ -90,8 +90,8 @@ namespace ServiceLayer.Services
         public Group Update(int? id, Group group)
         {
             if (id is null) throw new InvalidGroupException(ResponseMessages.NotFound);
-          
             group.Id = (int)id;
+
             _repo.Update(group);
            
             return group;

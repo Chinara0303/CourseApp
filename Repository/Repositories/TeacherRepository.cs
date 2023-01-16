@@ -46,19 +46,16 @@ namespace Repository.Repositories
 
             if (String.IsNullOrWhiteSpace(entity.Surname))
                 entity.Surname = dbTeacher.Surname;
-            dbTeacher.Surname = String.Concat(dbTeacher.Surname[0].ToString().ToUpper()) + dbTeacher.Surname.Substring(1).ToLower();
+            dbTeacher.Surname = String.Concat(entity.Surname[0].ToString().ToUpper()) + entity.Surname.Substring(1).ToLower();
 
             if (String.IsNullOrWhiteSpace(entity.Address))
                 entity.Address = dbTeacher.Address;
-            dbTeacher.Address = String.Concat(dbTeacher.Address[0].ToString().ToUpper()) + dbTeacher.Address.Substring(1).ToLower();
-            if (entity.Age == null)
-            {
+            dbTeacher.Address = String.Concat(entity.Address[0].ToString().ToUpper()) + entity.Address.Substring(1).ToLower();
+            
+            if(entity.Age == 0)
                 entity.Age = dbTeacher.Age;
-            }
-            else
-            {
-                dbTeacher.Age = entity.Age;
-            }
+            dbTeacher.Age = entity.Age;
+
         }
     }
 }
