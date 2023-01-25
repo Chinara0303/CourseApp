@@ -27,11 +27,11 @@ namespace ServiceLayer.Services
         {
             if (id == null) throw new InvalidTeacherException(ResponseMessages.NotFound);
             
-            Teacher filteredteacher =  _repo.Get(t => t.Id == id);
+            Teacher filteredTeacher =  _repo.Get(t => t.Id == id);
            
-            if (filteredteacher is null) throw new InvalidTeacherException(ResponseMessages.NotFound);
+            if (filteredTeacher is null) throw new InvalidTeacherException(ResponseMessages.NotFound);
             
-            _repo.Delete(filteredteacher);
+            _repo.Delete(filteredTeacher);
         }
 
         public List<Teacher> GetAll()

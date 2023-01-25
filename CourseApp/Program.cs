@@ -5,7 +5,7 @@ using Spectre.Console;
 
 TeacherController teacherController = new();
 GroupController groupController = new();
-AnsiConsole.Write(new FigletText("Hi, P135!").Color(Color.Red3));
+AnsiConsole.Write(new FigletText("Hello!").Color(Color.Red3));
 
 while (true)
 {
@@ -117,11 +117,6 @@ while (true)
             break;
         }
     }
-    //else if(optionNum >= 0 && optionNum < 3)
-    //{
-    //    ConsoleColor.Red.WriteConsole("Please, enter correct option");
-    //    goto Option;
-    //}
     else
     {
         ConsoleColor.Red.WriteConsole("Please, enter correct format option");

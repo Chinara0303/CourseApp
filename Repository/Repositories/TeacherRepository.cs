@@ -33,23 +33,19 @@ namespace Repository.Repositories
             if (entity == null) throw new ArgumentNullException();
 
             var dbTeacher = Get(t => t.Id == entity.Id);
-            if (dbTeacher == null) throw new ArgumentNullException();
+            if (dbTeacher == null) throw new NullReferenceException();
 
-            if (String.IsNullOrWhiteSpace(entity.Name))
-                    entity.Name = dbTeacher.Name;
-            dbTeacher.Name = String.Concat(entity.Name[0].ToString().ToUpper(),entity.Name.Substring(1).ToLower());
+            if (!String.IsNullOrWhiteSpace(entity.Name))
+                 dbTeacher.Name = String.Concat(entity.Name[0].ToString().ToUpper(),entity.Name.Substring(1).ToLower());
 
-            if (String.IsNullOrWhiteSpace(entity.Surname))
-                entity.Surname = dbTeacher.Surname;
-            dbTeacher.Surname = String.Concat(entity.Surname[0].ToString().ToUpper(),entity.Surname.Substring(1).ToLower());
+            if (!String.IsNullOrWhiteSpace(entity.Surname))
+                 dbTeacher.Surname = String.Concat(entity.Surname[0].ToString().ToUpper(),entity.Surname.Substring(1).ToLower());
 
-            if (String.IsNullOrWhiteSpace(entity.Address))
-                entity.Address = dbTeacher.Address;
-            dbTeacher.Address = String.Concat(entity.Address[0].ToString().ToUpper(),entity.Address.Substring(1).ToLower());
+            if (!String.IsNullOrWhiteSpace(entity.Address))
+                 dbTeacher.Address = String.Concat(entity.Address[0].ToString().ToUpper(),entity.Address.Substring(1).ToLower());
             
-            if(entity.Age == 0)
-                entity.Age = dbTeacher.Age;
-            dbTeacher.Age = entity.Age;
+            if(entity.Age != 0)
+                dbTeacher.Age = entity.Age;
         }
     }
 }

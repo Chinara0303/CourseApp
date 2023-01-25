@@ -170,9 +170,7 @@ namespace CourseApp.Controller
                 goto Id;
             }
             else if (id.CheckNumEqualZero())
-            {
                 goto Id;
-            }
             else
             {
                 try
@@ -272,9 +270,7 @@ namespace CourseApp.Controller
                 goto Id;
             }
             else if (id.CheckNumEqualZero())
-            {
                 goto Id;
-            }
             else
             {
                 try
@@ -317,7 +313,7 @@ namespace CourseApp.Controller
             bool isCorrectId = int.TryParse(idStr, out id);
             if (!isCorrectId || id < 0)
             {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.FormatMessage + ResponseMessages.EnterAgainMessage);
+                ConsoleColor.Red.WriteConsole(ResponseMessages.FormatMessage + ResponseMessages.ForEmptyInputMessage);
                 goto Id;
             }
             else if (id.CheckNumEqualZero())
@@ -339,10 +335,9 @@ namespace CourseApp.Controller
             ConsoleColor.Cyan.WriteConsole("Please, enter group capacity" + ResponseMessages.ForEmptyInputMessage);
         Capacity: string capacityStr = Console.ReadLine();
             int capacity;
-            int checkCap = 0;
 
             if (String.IsNullOrWhiteSpace(capacityStr))
-                capacity = checkCap;
+                capacity = 0;
             else
             {
                 bool IsCorrectCapacity = int.TryParse(capacityStr, out capacity);
@@ -362,9 +357,8 @@ namespace CourseApp.Controller
             ConsoleColor.Cyan.WriteConsole("Please, enter teacher id" + ResponseMessages.ForEmptyInputMessage);
             TeacherId: string teacherIdStr = Console.ReadLine();
             int teacherId;
-            int checkTeacherId = 0;
             if (String.IsNullOrWhiteSpace(teacherIdStr))
-                teacherId = checkTeacherId;
+                teacherId = 0;
             else
             {
                 bool isCorrectTeacherId = int.TryParse(teacherIdStr, out teacherId);
@@ -379,13 +373,12 @@ namespace CourseApp.Controller
             }
             try
             {
+                Group newGroup = new Group();
                 if(teacherId == 0)
                 {
-                    Group newGroup = new Group()
-                    {
-                        Name = groupName,
-                        Capacity = capacity,
-                    };
+                    newGroup.Name = groupName;
+                    newGroup.Capacity = capacity;
+                    
                     _groupService.Update(id, newGroup);
                     ConsoleColor.Green.WriteConsole($"Successfully updated");
                 }
@@ -393,12 +386,11 @@ namespace CourseApp.Controller
                 {
                     Teacher existTeacher = _teacherService.GetById(teacherId);
                     if (existTeacher == null) throw new ArgumentNullException();
-                    Group newGroup = new Group()
-                    {
-                        Name = groupName,
-                        Capacity = capacity,
-                        Teacher = existTeacher
-                    };
+
+                    newGroup.Name = groupName;
+                    newGroup.Capacity = capacity;
+                    newGroup.Teacher = existTeacher;
+
                     _groupService.Update(id, newGroup);
                     ConsoleColor.Green.WriteConsole($"Successfully updated");
                 }

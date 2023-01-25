@@ -170,9 +170,7 @@ namespace CourseApp.Controller
                 goto Id;
             }
             else if(id.CheckNumEqualZero())
-            {
                 goto Id;
-            }
             try
             {
                 Teacher dbTeacher = _service.GetById(id);
@@ -188,9 +186,8 @@ namespace CourseApp.Controller
                 ConsoleColor.Cyan.WriteConsole("Please, enter teacher surname" + ResponseMessages.ForEmptyInputMessage);
                 TeacherSurname: string teacherSurname = Console.ReadLine();
                 if (teacherSurname.Trim().CheckSymbol())
-                {
                     goto TeacherSurname;
-                }
+                
 
                 ConsoleColor.Cyan.WriteConsole("Please, enter teacher address" + ResponseMessages.ForEmptyInputMessage);
                 string teacherAddress = Console.ReadLine();
@@ -198,10 +195,9 @@ namespace CourseApp.Controller
                 ConsoleColor.Cyan.WriteConsole("Please, enter teacher age" + ResponseMessages.ForEmptyInputMessage);
                 Age: string ageStr = Console.ReadLine();
                 int age;
-                int checkNum = 0;
                 if (String.IsNullOrWhiteSpace(ageStr))
                 {
-                    age = checkNum;
+                    age = 0;
                 }
                 else
                 {
@@ -236,9 +232,7 @@ namespace CourseApp.Controller
         Searchtext: string searchText = Console.ReadLine();
 
             if (searchText.Trim().CheckSymbol())
-            {
                 goto Searchtext;
-            }
             try
             {
                 List<Teacher> result = _service.SearchByNameAndSurname(searchText.Trim());

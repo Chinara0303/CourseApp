@@ -30,21 +30,19 @@ namespace Repository.Repositories
 
         public void Update(Group entity)
         {
-           if(entity is null) throw new ArgumentNullException();
+            if(entity is null) throw new ArgumentNullException();
+
             var dbGroup = Get(g => g.Id == entity.Id);
-            if (dbGroup == null) throw new ArgumentNullException();
+            if (dbGroup == null) throw new NullReferenceException();
 
-            if(entity.Teacher == null)
-                entity.Teacher = dbGroup.Teacher;
-            dbGroup.Teacher = entity.Teacher;
+            if(entity.Teacher != null)
+                dbGroup.Teacher = entity.Teacher;
 
-            if (String.IsNullOrWhiteSpace(entity.Name))
-                entity.Name = dbGroup.Name;
-            dbGroup.Name = String.Concat(entity.Name[0].ToString().ToUpper(),entity.Name.Substring(1).ToLower());
+            if (!String.IsNullOrWhiteSpace(entity.Name))
+                dbGroup.Name = String.Concat(entity.Name[0].ToString().ToUpper(),entity.Name.Substring(1).ToLower());
             
-            if(entity.Capacity == 0)
-                entity.Capacity = dbGroup.Capacity;
-            dbGroup.Capacity = entity.Capacity;
+            if(entity.Capacity != 0)
+                dbGroup.Capacity = entity.Capacity;
         }
     }
 }
